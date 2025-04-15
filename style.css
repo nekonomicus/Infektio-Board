@@ -9,7 +9,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px; /* Slightly wider container */
     margin: 0 auto;
     background-color: #fff;
     padding: 30px;
@@ -18,7 +18,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-    color: #2c3e50; /* Consistent header color */
+    color: #2c3e50;
 }
 
 h1 { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
@@ -37,13 +37,7 @@ section.card {
 
 /* Form Styles */
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px 20px; align-items: start; }
-.patient-info-grid { grid-template-columns: repeat(3, 1fr); }
-@media (max-width: 850px) { /* Stack patient info on smaller screens */
-    .patient-info-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) { /* Stack patient info on smaller screens */
-    .patient-info-grid { grid-template-columns: 1fr; }
-}
+.patient-info-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } /* More flexible patient grid */
 .patient-info-grid .diagnose-field { grid-column: 1 / -1; }
 .form-grid > .full-width { grid-column: 1 / -1; }
 
@@ -53,7 +47,7 @@ textarea { resize: vertical; min-height: 60px; }
 input:focus, select:focus, textarea:focus { border-color: #3498db; outline: none; box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); }
 
 /* Checkbox Styling */
-.checkbox-group { display: flex; flex-direction: column; gap: 5px; align-self: start; /* Align top */ padding-top: 25px; /* Align with other labels roughly */ }
+.checkbox-group { display: flex; flex-direction: column; gap: 5px; align-self: start; padding-top: 25px; }
 .checkbox-group > label { margin-bottom: 8px; }
 .checkbox-group div { display: flex; align-items: center; }
 .checkbox-group input[type="checkbox"] { width: auto; margin-right: 8px; }
@@ -76,73 +70,104 @@ button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; 
 #eventList li { padding: 10px 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; }
 #eventList li:last-child { border-bottom: none; }
 #eventList li span { flex-grow: 1; margin-right: 10px; word-break: break-word; }
-#eventList .delete-button { background-color: #e74c3c; color: white; border: none; border-radius: 3px; padding: 3px 8px; font-size: 0.8em; cursor: pointer; margin-left: 10px; flex-shrink: 0; transition: background-color 0.2s ease; }
+#eventList .delete-button { background-color: #e74c3c; color: white; border: none; border-radius: 50%; /* Circle */ width: 20px; height: 20px; font-size: 0.8em; cursor: pointer; margin-left: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0; transition: background-color 0.2s ease; }
 #eventList .delete-button:hover { background-color: #c0392b; }
 
-/* Timeline SVG */
+/* Timeline Section */
 #timelineSection { margin-top: 30px; position: relative; }
-#timelineSvgWrapper { border: 1px solid #ccc; overflow-x: auto; overflow-y: hidden; background-color: #fdfdfd; margin-bottom: 10px; min-height: 100px; /* Ensure wrapper has height even when SVG is empty */ }
-#timelineSvg { display: block; min-width: 800px; }
+#timelineSvgWrapper {
+    border: 1px solid #ccc;
+    overflow-x: auto;
+    overflow-y: hidden; /* Important for horizontal scroll */
+    background-color: #fdfdfd;
+    margin-bottom: 10px;
+    min-height: 150px; /* Ensure minimum height */
+}
+#timelineSvg {
+    display: block; /* Remove extra space below inline SVG */
+    min-width: 1000px; /* Ensure a minimum width for readability */
+    /* Height will be set dynamically by JS */
+}
 #timelineStatus { color: #7f8c8d; font-style: italic; }
 
 /* SVG Elements Styling */
-.axis-line { stroke: #555; stroke-width: 2; }
+.axis-line { stroke: #555; stroke-width: 1.5; }
 .axis-tick line { stroke: #ccc; stroke-width: 1; }
 .axis-tick text { fill: #555; font-size: 10px; text-anchor: middle; }
 .axis-label { fill: #333; font-size: 11px; font-weight: bold; text-anchor: end; }
-.grid-line { stroke: #eee; stroke-width: 1; stroke-dasharray: 2,2; }
+.grid-line { stroke: #eee; stroke-width: 1; }
 
 /* Markers */
-.op-marker { fill: #e74c3c; stroke: #c0392b; stroke-width: 1; cursor: pointer; transform: rotate(45deg); }
-.event-marker { fill: #f1c40f; stroke: #f39c12; stroke-width: 1; cursor: pointer; }
-.note-marker { fill: #bdc3c7; stroke: #95a5a6; stroke-width: 1; cursor: pointer; }
-.germ-marker { fill: #8e44ad; stroke: #702b8a; stroke-width: 1; cursor: pointer; } /* Purple for germs */
-.marker-base { /* Common styles for hover effects etc if needed */ }
+.marker-base { pointer-events: none; } /* Remove pointer events */
+.op-marker { fill: #e74c3c; stroke: #c0392b; stroke-width: 0.5; transform: rotate(45deg); }
+.event-marker { fill: #f1c40f; stroke: #f39c12; stroke-width: 0.5; }
+.note-marker { fill: #bdc3c7; stroke: #95a5a6; stroke-width: 0.5; }
+.germ-marker { fill: #8e44ad; stroke: #702b8a; stroke-width: 0.5; }
 
-/* Antibiotic Bar */
-.antibiotic-bar { fill: #2ecc71; opacity: 0.7; stroke: #27ae60; stroke-width: 0.5; cursor: pointer; }
-.bar-label { font-size: 9px; fill: #fff; text-anchor: middle; pointer-events: none; dominant-baseline: middle; }
-.bar-label-dark { font-size: 9px; fill: #333; text-anchor: middle; pointer-events: none; dominant-baseline: middle; }
-
-/* Lab Plots */
-.crp-plot { stroke: #3498db; fill: none; stroke-width: 2; }
-.crp-point { fill: #3498db; stroke: white; stroke-width: 1; cursor: pointer; }
-.lc-plot { stroke: #9b59b6; fill: none; stroke-width: 2; }
-.lc-point { fill: #9b59b6; stroke: white; stroke-width: 1; cursor: pointer; }
-.lab-value-label { font-size: 9px; fill: #555; text-anchor: middle; pointer-events: none; }
-
-/* Tooltip */
-.tooltip {
-    position: absolute;
-    text-align: left;
-    padding: 8px 12px;
-    font-size: 12px;
-    background: rgba(50, 50, 50, 0.9);
-    color: #fff;
-    border: 0px;
-    border-radius: 4px;
-    pointer-events: none; /* Important */
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-    white-space: pre-wrap; /* Allows line breaks */
-    max-width: 300px;
-    z-index: 1000; /* Ensure it's above other elements */
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+/* Static Marker Labels */
+.marker-text-label {
+    font-size: 9px;
+    fill: #333;
+    text-anchor: middle;
+    dominant-baseline: central; /* Center vertically */
+    pointer-events: none;
 }
 
-/* Summary Section Layout */
-#summariesSection { margin-top: 20px; display: grid; gap: 25px; grid-template-columns: 1fr; }
-@media (min-width: 992px) { #summariesSection { grid-template-columns: repeat(3, 1fr); } }
+/* Antibiotic Bar */
+.antibiotic-bar { fill: #2ecc71; opacity: 0.7; stroke: #27ae60; stroke-width: 0.5; pointer-events: none; }
+/* Static Bar Labels */
+.bar-text-label {
+    font-size: 9px;
+    fill: #333; /* Darker text for better contrast */
+    text-anchor: start; /* Align text to the start of the bar */
+    dominant-baseline: middle;
+    pointer-events: none;
+}
+
+/* Lab Plots */
+.crp-plot { stroke: #3498db; fill: none; stroke-width: 1.5; pointer-events: none; }
+.crp-point { fill: #3498db; stroke: white; stroke-width: 0.5; pointer-events: none; }
+.lc-plot { stroke: #9b59b6; fill: none; stroke-width: 1.5; pointer-events: none; }
+.lc-point { fill: #9b59b6; stroke: white; stroke-width: 0.5; pointer-events: none; }
+
+/* Static Lab Value Labels */
+.lab-value-text-label {
+    font-size: 9px;
+    fill: #555;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+/* Tooltip is removed */
+
+/* Summaries Section Layout (Improved Flexbox Layout) */
+#summariesContainer { margin-top: 20px; }
+#summariesSection {
+    display: flex; /* Use Flexbox */
+    flex-wrap: wrap; /* Allow items to wrap */
+    gap: 20px; /* Space between boxes */
+    justify-content: flex-start; /* Align items to the start */
+}
 
 /* Summary Box Styling */
-.summary-box { border: 1px solid #eee; padding: 15px; border-radius: 4px; background-color: #fdfdfd; display: flex; flex-direction: column; }
+.summary-box {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 4px;
+    background-color: #fdfdfd;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 300px; /* Flex grow, shrink, basis (min width before wrap) */
+    min-width: 280px; /* Ensure minimum width */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
 .summary-list-container { max-height: 250px; overflow-y: auto; margin-bottom: 10px; flex-grow: 1; border: 1px solid #eee; padding: 5px; border-radius: 3px; background-color: #fff;}
 #summariesSection ul { list-style-type: none; padding-left: 0; margin-top: 0; margin-bottom: 0; }
 #summariesSection li { background-color: #ecf0f1; margin-bottom: 8px; padding: 8px 12px; border-radius: 3px; font-size: 0.9em; border-left: 4px solid #bdc3c7; line-height: 1.4; }
 #opSummary li { border-left-color: #e74c3c; }
 #germSummary li { border-left-color: #8e44ad; } /* Purple */
 #antibioticSummary li { border-left-color: #2ecc71; }
-#summariesSection li .date { font-weight: bold; margin-right: 8px; color: #555; display: inline-block; min-width: 75px; } /* Fixed width for date */
+#summariesSection li .date { font-weight: bold; margin-right: 8px; color: #555; display: inline-block; min-width: 75px; }
 .summary-box button { margin-top: auto; align-self: flex-start; }
 
 /* Divider */
@@ -159,32 +184,33 @@ hr.section-divider { border: none; border-top: 1px solid #eee; margin: 30px 0; }
 @media print {
     body { padding: 0; background-color: #fff !important; color: #000 !important; font-size: 9pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .container { box-shadow: none; border: none; padding: 5mm; max-width: 100%; margin: 0; }
-    section.card { box-shadow: none; border: none; page-break-inside: avoid; padding: 0; margin-bottom: 10mm; }
+    section.card { box-shadow: none; border: none; page-break-inside: avoid; padding: 0; margin-bottom: 5mm; /* Reduced margin */ }
     h1, h2, h3, h4 { color: #000 !important; }
     hr.section-divider { display: none !important;}
     button { display: none !important; } /* Hide ALL buttons in print */
 
     /* Default Print: Hide Forms & Input Events, Show Patient Info, Timeline, Summaries */
     body:not(.printing-timeline-only) > .container > section:not(#patientInfoSection):not(#outputSection) { display: none !important; }
-    body:not(.printing-timeline-only) #outputSection > *:not(#timelineSection):not(#summariesSection):not(h2):not(hr) { display: none !important; } /* Hide buttons etc within output */
-    body:not(.printing-timeline-only) #summariesSection .button-copy {display: none !important;} /* Hide copy buttons in summaries */
+    body:not(.printing-timeline-only) #outputSection > *:not(#timelineSection):not(#summariesContainer):not(h2):not(hr) { display: none !important; }
+    body:not(.printing-timeline-only) #summariesSection .button-copy {display: none !important;} /* Hide copy buttons */
+    body:not(.printing-timeline-only) #summariesSection { flex-wrap: nowrap; /* Prevent wrapping in print */ }
+
 
     /* Styles ONLY when printing timeline */
-     body.printing-timeline-only > .container > section:not(#outputSection) { display: none !important; } /* Hide non-output */
-     body.printing-timeline-only #outputSection > *:not(#timelineSection){ display: none !important; } /* Hide summaries & header */
+     body.printing-timeline-only > .container > section:not(#outputSection) { display: none !important; }
+     body.printing-timeline-only #outputSection > *:not(#timelineSection){ display: none !important; }
      body.printing-timeline-only #outputSection { padding: 0; margin: 0; border: none; }
 
     body.printing-timeline-only #timelineSection { display: block !important; width: 100%; border: none; padding: 0; margin: 0; page-break-inside: avoid; }
-     body.printing-timeline-only #timelineSection h3, body.printing-timeline-only #timelineSection p { display: none !important; } /* Hide title/hint */
+     body.printing-timeline-only #timelineSection h3, body.printing-timeline-only #timelineSection p { display: none !important; }
      body.printing-timeline-only #timelineSvgWrapper { border: none; overflow: visible !important; background-color: #fff !important; }
-      body.printing-timeline-only #timelineSvg { min-width: unset; width: 100%; height: auto; }
+      body.printing-timeline-only #timelineSvg { min-width: unset; width: 100%; height: auto; } /* Ensure SVG scales */
 
      /* General Print SVG styles (apply in both modes if SVG is visible) */
      #timelineSvg { border: 1px solid #aaa; background-color: #fff !important;}
      .axis-line, .axis-tick line { stroke: #000 !important; }
      .grid-line { stroke: #ccc !important; stroke-dasharray: none !important;}
-     .axis-tick text, .axis-label, .marker-label, .lab-value-label, .bar-label-dark { fill: #000 !important; font-size: 8pt !important; }
-     .bar-label { fill: #000 !important; font-size: 7pt !important; }
+     .axis-tick text, .axis-label, .marker-text-label, .lab-value-text-label, .bar-text-label { fill: #000 !important; font-size: 8pt !important; }
 
      .op-marker { fill: #e74c3c !important; stroke: #000 !important; stroke-width: 0.5pt !important; }
      .event-marker { fill: #f1c40f !important; stroke: #000 !important; stroke-width: 0.5pt !important; }
@@ -196,6 +222,4 @@ hr.section-divider { border: none; border-top: 1px solid #eee; margin: 30px 0; }
      .crp-point { fill: #3498db !important; stroke: #000 !important; stroke-width: 0.5pt !important; r: 2pt; }
      .lc-plot { stroke: #9b59b6 !important; fill: none !important; stroke-width: 1pt !important; }
      .lc-point { fill: #9b59b6 !important; stroke: #000 !important; stroke-width: 0.5pt !important; r: 2pt; }
-
-     .tooltip { display: none !important; }
 }
