@@ -99,20 +99,8 @@ button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; 
 .tooltip { position: absolute; text-align: left; padding: 8px; font-size: 12px; background: rgba(51, 51, 51, 0.9); color: #fff; border: 0px; border-radius: 4px; pointer-events: none; opacity: 0; transition: opacity 0.2s ease-in-out; white-space: pre-wrap; max-width: 280px; z-index: 10; }
 
 /* Summary Section Layout */
-#summariesSection {
-    margin-top: 20px; /* Adjusted margin */
-    display: grid;
-    gap: 25px;
-    /* Default: 1 column */
-    grid-template-columns: 1fr;
-}
-
-/* Apply 3 columns only on wider screens */
-@media (min-width: 992px) { /* Adjust breakpoint as needed */
-    #summariesSection {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+#summariesSection { margin-top: 20px; display: grid; gap: 25px; grid-template-columns: 1fr; }
+@media (min-width: 992px) { #summariesSection { grid-template-columns: repeat(3, 1fr); } }
 
 /* Summary Box Styling */
 .summary-box { border: 1px solid #eee; padding: 15px; border-radius: 4px; background-color: #fdfdfd; display: flex; flex-direction: column; }
@@ -126,12 +114,7 @@ button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; 
 .summary-box button { margin-top: auto; align-self: flex-start; }
 
 /* Divider */
-hr.section-divider {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 30px 0;
-}
-
+hr.section-divider { border: none; border-top: 1px solid #eee; margin: 30px 0; }
 
 /* Clipboard HTML Table Styles */
 .clipboard-table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 10pt; margin-bottom: 1em; }
@@ -140,57 +123,38 @@ hr.section-divider {
 .clipboard-table th { background-color: #f2f2f2; font-weight: bold; }
 .clipboard-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
 
-
 /* Print Styles */
 @media print {
-    body { padding: 0; background-color: #fff; color: #000; font-size: 10pt; } /* Base print font size */
-    .container { box-shadow: none; border: none; padding: 5mm; max-width: 100%; } /* Use mm for print padding */
+    body { padding: 0; background-color: #fff; color: #000; font-size: 10pt; }
+    .container { box-shadow: none; border: none; padding: 5mm; max-width: 100%; }
     section.card { box-shadow: none; border: none; page-break-inside: avoid; padding: 0; margin-bottom: 10mm; }
 
-    /* Default: Hide everything except output section */
+    /* Default: Hide everything except the specific print section */
     body > *:not(#outputSection) { display: none !important; }
     #outputSection { display: block !important; }
-    #summariesSection { display: none !important; } /* Hide summaries by default */
-    #timelineSection h3, #timelineSection p { display: none !important; } /* Hide timeline title/hint */
-    #printTimelineButton { display: none !important; } /* Hide print button */
+    #summariesSection { display: none !important; }
+    #timelineSection h3, #timelineSection p { display: none !important; }
+    button { display: none !important; } /* Hide ALL buttons by default in print */
      hr.section-divider { display: none !important;}
 
-    /* Specific styles when printing timeline only */
-    body.printing-timeline-only #summariesSection {
-        display: none !important; /* Ensure summaries are hidden */
-    }
-    body.printing-timeline-only #timelineSection {
-         display: block !important; /* Ensure timeline is visible */
-         width: 100%;
-         border: none;
-         padding: 0;
-         margin: 0;
-         page-break-inside: auto; /* Allow breaking if needed */
-    }
-     body.printing-timeline-only #timelineSvgWrapper {
-        border: none;
-        overflow: visible; /* Don't clip or scroll in print */
-     }
-      body.printing-timeline-only #timelineSvg {
-         min-width: unset; /* Remove min-width for print scaling */
-         width: 100%; /* Scale SVG width to container */
-         height: auto; /* Maintain aspect ratio */
-      }
+    /* Styles ONLY when printing timeline */
+    body.printing-timeline-only #summariesSection { display: none !important; }
+    body.printing-timeline-only #timelineSection { display: block !important; width: 100%; border: none; padding: 0; margin: 0; page-break-inside: auto; }
+     body.printing-timeline-only #timelineSvgWrapper { border: none; overflow: visible; }
+      body.printing-timeline-only #timelineSvg { min-width: unset; width: 100%; height: auto; }
 
      /* General Print SVG styles */
      #timelineSvg { border: 1px solid #aaa; }
      .axis-line, .axis-tick line { stroke: #000; }
-     .axis-tick text, .axis-label, .marker-label, .lab-value-label, .bar-label-dark { fill: #000 !important; font-size: 8pt; } /* Smaller font for print */
-     .bar-label { fill: #000 !important; font-size: 7pt; } /* Even smaller on bars */
-
+     .axis-tick text, .axis-label, .marker-label, .lab-value-label, .bar-label-dark { fill: #000 !important; font-size: 8pt; }
+     .bar-label { fill: #000 !important; font-size: 7pt; }
      .op-marker { fill: #e74c3c !important; stroke: #000 !important; }
      .event-marker { fill: #f1c40f !important; stroke: #000 !important; }
      .note-marker { fill: #bdc3c7 !important; stroke: #000 !important; }
-     .antibiotic-bar { fill: #2ecc71 !important; stroke: #000 !important; opacity: 0.6; } /* Slightly less opacity */
+     .antibiotic-bar { fill: #2ecc71 !important; stroke: #000 !important; opacity: 0.6; }
      .germ-marker { fill: #f39c12 !important; stroke: #000 !important; }
      .crp-plot path, .crp-point { stroke: #3498db !important; fill: #3498db !important; stroke-width: 1 !important; }
      .lc-plot path, .lc-point { stroke: #9b59b6 !important; fill: #9b59b6 !important; stroke-width: 1 !important; }
-     .crp-point, .lc-point { r: 2; } /* Smaller points */
-
-     .tooltip { display: none !important; } /* Hide tooltips */
+     .crp-point, .lc-point { r: 2; }
+     .tooltip { display: none !important; }
 }
