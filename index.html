@@ -10,7 +10,7 @@
     <div class="container">
         <h1>Patienten-Timeline Generator</h1>
 
-        <section class="card">
+        <section class="card" id="patientInfoSection">
             <h2>Patienteninformationen</h2>
             <div class="form-grid patient-info-grid">
                 <div>
@@ -19,7 +19,8 @@
                 </div>
                 <div>
                     <label for="patientDob">Geburtsdatum:</label>
-                    <input type="date" id="patientDob" name="patientDob"> </div>
+                    <input type="date" id="patientDob" name="patientDob">
+                </div>
                  <div>
                     <label for="orthoTeam">Orthopädie Team:</label>
                     <select id="orthoTeam" name="orthoTeam">
@@ -61,7 +62,8 @@
             <form id="eventForm" class="form-grid">
                 <div>
                     <label for="eventDate">Datum:</label>
-                    <input type="date" id="eventDate" name="eventDate" required> </div>
+                    <input type="date" id="eventDate" name="eventDate" required>
+                </div>
                 <div>
                     <label for="eventType">Ereignistyp:</label>
                     <select id="eventType" name="eventType" required>
@@ -78,8 +80,8 @@
                 </div>
                 <div class="full-width">
                     <label for="eventDetails">Details / Wert:</label>
-                    <input type="text" id="eventDetails" name="eventDetails" required placeholder="z.B. OP-Beschreibung, Medikament/Dosis, Keim/Resistenz, Laborwert, Ereignisbeschreibung">
-                </div>
+                    <input type="text" id="eventDetails" name="eventDetails" placeholder="z.B. OP-Beschreibung, Medikament/Dosis, Keim/Resistenz, Laborwert, Ereignisbeschreibung">
+                    </div>
                 <div class="full-width">
                     <button type="submit" class="button-primary">Ereignis hinzufügen</button>
                 </div>
@@ -91,7 +93,7 @@
             <ul id="eventList">
                 <li>Noch keine Ereignisse hinzugefügt.</li>
             </ul>
-             <button id="clearAllButton" class="button-danger">Alle Ereignisse löschen</button>
+             <button id="clearAllButton" class="button-danger">Alle Ereignisse & Patientendaten löschen</button>
         </section>
 
 
@@ -100,7 +102,7 @@
 
             <div id="timelineSection">
                 <h3>Timeline</h3>
-                <p><i>Hinweis: Für Präsentationen die Timeline am besten als Screenshot kopieren.</i></p>
+                <p><i>Hinweis: Für Präsentationen die Timeline am besten als Screenshot kopieren oder drucken.</i></p>
                  <p id="timelineStatus">Ereignisse eingeben, um die Timeline zu generieren.</p>
                 <div id="timelineSvgWrapper">
                     <svg id="timelineSvg" width="100%" height="450"></svg>
@@ -135,8 +137,7 @@
                 </div>
             </div>
         </section>
-         <div class="tooltip"></div>
-    </div>
+         <div class="tooltip"></div> </div>
 
     <script src="script.js"></script>
 </body>
