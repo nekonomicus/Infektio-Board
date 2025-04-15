@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patienten-Timeline Generator</title>
-    <link rel="stylesheet" href="datepicker.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,7 +19,7 @@
                 </div>
                 <div>
                     <label for="patientDob">Geburtsdatum:</label>
-                    <input type="text" id="patientDob" name="patientDob" placeholder="TT.MM.JJJJ" autocomplete="off">
+                    <input type="date" id="patientDob" name="patientDob">
                 </div>
                  <div>
                     <label for="orthoTeam">Orthopädie Team:</label>
@@ -63,7 +62,7 @@
             <form id="eventForm" class="form-grid">
                 <div>
                     <label for="eventDate">Datum:</label>
-                    <input type="text" id="eventDate" name="eventDate" required placeholder="TT.MM.JJJJ" autocomplete="off">
+                     <input type="date" id="eventDate" name="eventDate" required>
                 </div>
                 <div>
                     <label for="eventType">Ereignistyp:</label>
@@ -98,9 +97,11 @@
         </section>
 
 
-        <section class="card" id="outputSection"> <h2>Generierte Timeline & Übersichten</h2>
+        <section class="card" id="outputSection">
+            <h2>Generierte Timeline & Übersichten</h2>
 
-            <div id="timelineSection"> <h3>Timeline</h3>
+            <div id="timelineSection">
+                <h3>Timeline</h3>
                 <p><i>Hinweis: Für Präsentationen die Timeline am besten als Screenshot kopieren.</i></p>
                  <p id="timelineStatus">Ereignisse eingeben, um die Timeline zu generieren.</p>
                 <div id="timelineSvgWrapper">
@@ -109,7 +110,9 @@
                  <button id="printTimelineButton" class="button-secondary">Timeline drucken</button>
             </div>
 
-            <hr class="section-divider"> <div id="summariesSection">
+            <hr class="section-divider">
+
+            <div id="summariesSection">
                 <h3>Übersichten</h3>
                 <div id="opSummary" class="summary-box">
                     <h4>Übersicht OPs</h4>
@@ -137,7 +140,6 @@
 
     </div>
 
-    <script src="datepicker-full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
