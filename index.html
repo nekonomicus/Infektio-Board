@@ -12,7 +12,7 @@
 
         <section class="card">
             <h2>Patienteninformationen</h2>
-            <div class="form-grid">
+            <div class="form-grid patient-info-grid">
                 <div>
                     <label for="patientName">Name, Vorname:</label>
                     <input type="text" id="patientName" name="patientName">
@@ -21,14 +21,35 @@
                     <label for="patientDob">Geburtsdatum:</label>
                     <input type="date" id="patientDob" name="patientDob">
                 </div>
-                <div>
+                 <div>
+                    <label for="orthoTeam">Orthopädie Team:</label>
+                    <select id="orthoTeam" name="orthoTeam">
+                        <option value="">-- Team wählen --</option>
+                        <option value="Fuss">Fuss</option>
+                        <option value="Hüfte">Hüfte</option>
+                        <option value="Knie">Knie</option>
+                        <option value="OE">Obere Extremität (OE)</option>
+                        <option value="Tumor">Tumor</option>
+                        <option value="WS">Wirbelsäule (WS)</option>
+                        <option value="Andere">Andere</option>
+                    </select>
+                </div>
+                 <div class="full-width diagnose-field">
                     <label for="patientDiagnosis">Diagnose:</label>
-                    <input type="text" id="patientDiagnosis" name="patientDiagnosis">
-                </div>
-                <div>
-                    <label for="patientTeam">Zuständiges Team:</label>
-                    <input type="text" id="patientTeam" name="patientTeam">
-                </div>
+                    <textarea id="patientDiagnosis" name="patientDiagnosis" rows="3"></textarea> </div>
+                 <div>
+                    <label for="patientTeam">Zuständiges ext. Team/Arzt:</label> <input type="text" id="patientTeam" name="patientTeam" placeholder="z.B. Hausarzt, Spital X">
+                 </div>
+                 <div class="checkbox-group">
+                     <label>Konsilien:</label>
+                     <div>
+                         <input type="checkbox" id="infektioInvolviert" name="infektioInvolviert">
+                         <label for="infektioInvolviert">Infektiologie involviert</label>
+                     </div>
+                     <div>
+                         <input type="checkbox" id="plwcInvolviert" name="plwcInvolviert">
+                         <label for="plwcInvolviert">PLWC involviert</label> </div>
+                 </div>
             </div>
              <button id="copyPatientDataButton" class="button-copy">Patientendaten kopieren</button>
         </section>
@@ -81,28 +102,29 @@
                 <p><i>Hinweis: Für Präsentationen die Timeline am besten als Screenshot kopieren.</i></p>
                  <p id="timelineStatus">Ereignisse eingeben, um die Timeline zu generieren.</p>
                 <div id="timelineSvgWrapper">
-                    <svg id="timelineSvg" width="100%" height="450"></svg> </div>
-                 </div>
+                    <svg id="timelineSvg" width="100%" height="450"></svg>
+                </div>
+            </div>
 
             <div id="summariesSection">
                 <h3>Übersichten</h3>
-                <div id="opSummary">
+                <div id="opSummary" class="summary-box">
                     <h4>Übersicht OPs</h4>
-                    <div id="opListContainer">
+                    <div id="opListContainer" class="summary-list-container">
                         <ul id="opList"><li>Keine OPs eingegeben.</li></ul>
                     </div>
                     <button id="copyOpsButton" class="button-copy">OPs kopieren</button>
                 </div>
-                <div id="germSummary">
+                <div id="germSummary" class="summary-box">
                     <h4>Übersicht Keim(e)</h4>
-                     <div id="germListContainer">
+                     <div id="germListContainer" class="summary-list-container">
                         <ul id="germList"><li>Keine Mikrobiologie eingegeben.</li></ul>
                      </div>
                     <button id="copyGermsButton" class="button-copy">Keime kopieren</button>
                 </div>
-                <div id="antibioticSummary">
+                <div id="antibioticSummary" class="summary-box">
                     <h4>Übersicht Antibiotika</h4>
-                    <div id="antibioticListContainer">
+                    <div id="antibioticListContainer" class="summary-list-container">
                         <ul id="antibioticList"><li>Keine Antibiotika eingegeben.</li></ul>
                     </div>
                     <button id="copyAntibioticsButton" class="button-copy">Antibiotika kopieren</button>
