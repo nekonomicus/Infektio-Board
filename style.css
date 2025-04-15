@@ -9,7 +9,7 @@ body {
 }
 
 .container {
-    max-width: 1200px; /* Adjust as needed */
+    max-width: 1200px;
     margin: 0 auto;
     background-color: #fff;
     padding: 30px;
@@ -41,7 +41,7 @@ h3 {
 
 h4 {
     color: #2980b9;
-    margin-top: 20px;
+    margin-top: 0; /* Removed top margin for summary titles */
     margin-bottom: 10px;
 }
 
@@ -58,12 +58,23 @@ section.card {
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px 20px;
+    gap: 15px 20px; /* Row and column gap */
+    align-items: start; /* Align items to the start of their grid area */
+}
+
+/* Specific grid for patient info to handle multi-column */
+.patient-info-grid {
+     grid-template-columns: repeat(3, 1fr); /* Three columns */
+}
+
+.patient-info-grid .diagnose-field {
+    grid-column: 1 / -1; /* Span all columns */
 }
 
 .form-grid > .full-width {
     grid-column: 1 / -1; /* Span full width */
 }
+
 
 label {
     display: block;
@@ -75,29 +86,63 @@ label {
 
 input[type="text"],
 input[type="date"],
-select {
+select,
+textarea { /* Added textarea */
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    box-sizing: border-box;
     font-size: 0.95em;
+    font-family: inherit; /* Ensure textarea uses same font */
 }
 
-input:focus, select:focus {
+textarea {
+    resize: vertical; /* Allow vertical resize only */
+    min-height: 60px; /* Minimum height for textarea */
+}
+
+input:focus, select:focus, textarea:focus {
     border-color: #3498db;
     outline: none;
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
+/* Checkbox Styling */
+.checkbox-group {
+    display: flex;
+    flex-direction: column; /* Stack label and checkboxes */
+    gap: 5px; /* Space between items */
+    align-self: center; /* Vertically center in grid cell */
+}
+.checkbox-group > label { /* Main label for the group */
+     margin-bottom: 8px; /* More space below main label */
+}
+
+.checkbox-group div { /* Container for each checkbox+label */
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto; /* Override default width */
+    margin-right: 8px; /* Space between checkbox and its label */
+}
+.checkbox-group label { /* Label next to checkbox */
+     margin-bottom: 0; /* Reset default bottom margin */
+     font-weight: normal; /* Normal weight for checkbox labels */
+     font-size: 0.95em;
+}
+
+
 button {
-    padding: 10px 15px; /* Adjusted padding */
+    padding: 10px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.95em; /* Adjusted font size */
+    font-size: 0.95em;
     transition: background-color 0.2s ease, opacity 0.2s ease;
-    margin-top: 10px; /* Added default margin */
+    margin-top: 10px;
 }
 
 .button-primary {
@@ -109,9 +154,9 @@ button {
 }
 
 .button-copy {
-    background-color: #1abc9c; /* Teal color */
+    background-color: #1abc9c;
     color: white;
-    margin-right: 5px; /* Space between copy buttons */
+    margin-right: 5px;
 }
 .button-copy:hover {
     background-color: #16a085;
@@ -142,7 +187,7 @@ button {
     border: 1px solid #eee;
     border-radius: 4px;
     margin-top: 15px;
-    margin-bottom: 10px; /* Space before clear button */
+    margin-bottom: 10px;
 }
 
 #eventList li {
@@ -161,7 +206,7 @@ button {
 #eventList li span {
     flex-grow: 1;
     margin-right: 10px;
-    word-break: break-word; /* Prevent long details overflowing */
+    word-break: break-word;
 }
 
 #eventList .delete-button {
@@ -172,8 +217,8 @@ button {
     padding: 3px 8px;
     font-size: 0.8em;
     cursor: pointer;
-    margin-left: 10px; /* Space from text */
-    flex-shrink: 0; /* Prevent button shrinking */
+    margin-left: 10px;
+    flex-shrink: 0;
     transition: background-color 0.2s ease;
 }
 #eventList .delete-button:hover {
@@ -196,8 +241,8 @@ button {
 
 
 #timelineSvg {
-    display: block; /* Remove extra space below SVG */
-    min-width: 800px; /* Ensure a minimum width */
+    display: block;
+    min-width: 800px;
 }
 
 /* Timeline Axis */
@@ -219,27 +264,27 @@ button {
 
 .axis-label {
     fill: #333;
-    font-size: 11px; /* Slightly larger axis labels */
-    text-anchor: start; /* Align to the start (left) */
+    font-size: 11px;
+    text-anchor: end; /* Anchor right for Y labels */
 }
 
 /* Timeline Event Markers */
 .op-marker {
-    fill: #e74c3c; /* Red */
+    fill: #e74c3c;
     stroke: #c0392b;
     stroke-width: 1;
     cursor: pointer;
 }
 
 .event-marker {
-    fill: #f1c40f; /* Yellow */
+    fill: #f1c40f;
     stroke: #f39c12;
     stroke-width: 1;
      cursor: pointer;
 }
 
 .note-marker {
-    fill: #bdc3c7; /* Grey */
+    fill: #bdc3c7;
     stroke: #95a5a6;
     stroke-width: 1;
      cursor: pointer;
@@ -249,20 +294,21 @@ button {
     font-size: 10px;
     fill: #333;
     text-anchor: middle;
-    pointer-events: none; /* Don't block mouse events on label */
+    pointer-events: none;
 }
 
-/* Timeline Bars (Antibiotics, Germs) */
+/* Timeline Bars */
 .antibiotic-bar {
-    fill: #2ecc71; /* Green */
+    fill: #2ecc71;
     opacity: 0.7;
     stroke: #27ae60;
     stroke-width: 0.5;
      cursor: pointer;
 }
 
-.germ-marker { /* Changed from germ-bar */
-    fill: #f39c12; /* Orange */
+/* Changed germ from bar to marker */
+.germ-marker {
+    fill: #f39c12;
     stroke: #e67e22;
     stroke-width: 1;
      cursor: pointer;
@@ -270,11 +316,11 @@ button {
 
 .bar-label {
     font-size: 9px;
-    fill: #fff; /* White text on bars */
+    fill: #fff;
     text-anchor: middle;
-    pointer-events: none; /* Allow clicks through text */
+    pointer-events: none;
 }
-.bar-label-dark { /* Alternative for light bars */
+.bar-label-dark {
     font-size: 9px;
     fill: #333;
     text-anchor: middle;
@@ -284,7 +330,7 @@ button {
 
 /* Timeline Lab Value Plots */
 .crp-plot path {
-    stroke: #3498db; /* Blue */
+    stroke: #3498db;
     fill: none;
     stroke-width: 1.5;
 }
@@ -295,7 +341,7 @@ button {
 }
 
 .lc-plot path {
-    stroke: #9b59b6; /* Purple */
+    stroke: #9b59b6;
     fill: none;
     stroke-width: 1.5;
 }
@@ -315,47 +361,57 @@ button {
 /* Tooltip */
 .tooltip {
     position: absolute;
-    text-align: left; /* Align text left */
+    text-align: left;
     padding: 8px;
     font-size: 12px;
-    background: rgba(51, 51, 51, 0.9); /* Darker, slightly transparent */
+    background: rgba(51, 51, 51, 0.9);
     color: #fff;
     border: 0px;
     border-radius: 4px;
-    pointer-events: none; /* Don't block mouse events */
+    pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    white-space: pre-wrap; /* Allow line breaks */
-    max-width: 280px; /* Slightly wider */
-    z-index: 10; /* Ensure tooltip is on top */
+    white-space: pre-wrap;
+    max-width: 280px;
+    z-index: 10;
 }
 
 /* Summary List Styles */
 #summariesSection {
     margin-top: 30px;
-    display: grid; /* Layout summaries side-by-side on wider screens */
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    gap: 25px; /* Increased gap */
 }
 
-#summariesSection > div { /* Style each summary box */
+.summary-box { /* Style each summary box */
      border: 1px solid #eee;
      padding: 15px;
      border-radius: 4px;
+     background-color: #fdfdfd; /* Light background */
+     display: flex; /* Use flexbox for layout */
+     flex-direction: column; /* Stack title, list, button vertically */
 }
 
+.summary-box h4 {
+     margin-bottom: 10px; /* Space below title */
+}
 
-#opListContainer, #germListContainer, #antibioticListContainer {
-     max-height: 250px; /* Limit height and allow scroll */
+.summary-list-container {
+     max-height: 250px;
      overflow-y: auto;
-     margin-bottom: 10px; /* Space before copy button */
+     margin-bottom: 10px;
+     flex-grow: 1; /* Allow list to grow */
+     border: 1px solid #eee; /* Add border around list */
+     padding: 5px; /* Padding inside border */
+     border-radius: 3px;
 }
 
 
 #summariesSection ul {
     list-style-type: none;
     padding-left: 0;
-    margin-top: 0; /* Remove default margin */
+    margin-top: 0;
 }
 
 #summariesSection li {
@@ -364,34 +420,49 @@ button {
     padding: 8px 12px;
     border-radius: 3px;
     font-size: 0.95em;
-    border-left: 4px solid #bdc3c7; /* Default border */
+    border-left: 4px solid #bdc3c7;
     line-height: 1.4;
 }
 
-/* Specific border colors matching timeline elements */
 #opSummary li { border-left-color: #e74c3c; }
 #germSummary li { border-left-color: #f39c12; }
 #antibioticSummary li { border-left-color: #2ecc71; }
 
 #summariesSection li .date {
     font-weight: bold;
-    margin-right: 8px; /* Slightly less margin */
+    margin-right: 8px;
     color: #555;
-    display: inline-block; /* Prevent awkward wrapping */
-    min-width: 80px; /* Ensure date alignment */
+    display: inline-block;
+    min-width: 80px;
 }
 
-/* Clipboard HTML Table Styles (won't be visible on page) */
+.summary-box button {
+     margin-top: auto; /* Push button to bottom */
+     align-self: flex-start; /* Align button left */
+}
+
+
+/* Clipboard HTML Table Styles */
 .clipboard-table {
     border-collapse: collapse;
     width: 100%;
     font-family: sans-serif;
-    font-size: 10pt; /* Use points for better Word/PPT scaling */
+    font-size: 10pt;
+    margin-bottom: 1em; /* Add space between tables if multiple copied */
 }
+.clipboard-table caption {
+    font-weight: bold;
+    font-size: 11pt;
+    text-align: left;
+    padding-bottom: 5px;
+    caption-side: top; /* Ensure caption is above */
+}
+
 .clipboard-table th, .clipboard-table td {
     border: 1px solid #ddd;
     padding: 6px;
     text-align: left;
+    vertical-align: top; /* Align cell content top */
 }
 .clipboard-table th {
     background-color: #f2f2f2;
