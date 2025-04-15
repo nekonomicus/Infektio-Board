@@ -11,7 +11,7 @@
         <h1>Patienten-Timeline Generator</h1>
 
         <section class="card" id="patientInfoSection">
-            <h2>Patienteninformationen</h2>
+             <h2>Patienteninformationen</h2>
             <div class="form-grid patient-info-grid">
                 <div>
                     <label for="patientName">Name, Vorname:</label>
@@ -59,30 +59,52 @@
 
         <section class="card">
             <h2>Ereignis hinzufügen</h2>
-            <form id="eventForm" class="form-grid">
-                <div>
-                    <label for="eventDate">Datum:</label>
-                    <input type="date" id="eventDate" name="eventDate" required>
+            <form id="eventForm"> <div class="event-input-row">
+                    <div class="event-input-group">
+                        <label for="eventDate">Datum:</label>
+                        <input type="date" id="eventDate" name="eventDate" required>
+                    </div>
+                    <div class="event-input-group event-type-group">
+                        <label for="eventType">Ereignistyp:</label>
+                        <select id="eventType" name="eventType" required>
+                            <option value="">-- Typ wählen --</option>
+                            <option value="OP">Operation (OP)</option>
+                            <option value="Antibiotika Start">Antibiotika Start</option>
+                            <option value="Antibiotika Ende">Antibiotika Ende</option>
+                            <option value="Probenentnahme">Probenentnahme</option>
+                            <option value="Labor CRP">Labor: CRP (mg/l)</option>
+                            <option value="Labor Lc">Labor: Lc (G/l)</option>
+                            </select>
+                    </div>
                 </div>
-                <div>
-                    <label for="eventType">Ereignistyp:</label>
-                    <select id="eventType" name="eventType" required>
-                        <option value="">-- Typ wählen --</option>
-                        <option value="OP">Operation (OP)</option>
-                        <option value="Antibiotika Start">Antibiotika Start</option>
-                        <option value="Antibiotika Ende">Antibiotika Ende</option>
-                        <option value="Mikrobiologie">Mikrobiologie (Keim)</option>
-                        <option value="Labor CRP">Labor: CRP (mg/l)</option>
-                        <option value="Labor Lc">Labor: Lc (G/l)</option>
-                        <option value="Klinisches Ereignis">Klinisches Ereignis</option>
-                        <option value="Notiz">Notiz</option>
-                    </select>
+
+                <div id="probeFields" class="event-input-row conditional-fields" style="display: none;">
+                    <div class="event-input-group">
+                        <label for="probeArt">Probenart:</label>
+                        <select id="probeArt" name="probeArt">
+                            <option value="">-- Art wählen --</option>
+                            <option value="Biopsie">Biopsie</option>
+                            <option value="Punktion">Punktion</option>
+                            <option value="Abstrich">Abstrich</option>
+                            <option value="Intra-OP">Intra-OP</option>
+                            <option value="Blutkultur">Blutkultur</option>
+                            <option value="Andere">Andere (siehe Details)</option>
+                        </select>
+                    </div>
+                    <div class="event-input-group">
+                        <label for="probeKeim">Nachgew. Keim (oder 'Negativ'):</label>
+                        <input type="text" id="probeKeim" name="probeKeim" placeholder="z.B. E. coli, Negativ">
+                    </div>
                 </div>
-                <div class="full-width">
-                    <label for="eventDetails">Details / Wert:</label>
-                    <input type="text" id="eventDetails" name="eventDetails" placeholder="z.B. OP-Beschreibung, Medikament/Dosis, Keim/Resistenz, Laborwert, Ereignisbeschreibung">
+
+                <div class="event-input-row">
+                    <div class="event-input-group full-width">
+                        <label for="eventDetails" id="eventDetailsLabel">Details / Wert:</label>
+                        <input type="text" id="eventDetails" name="eventDetails" placeholder="Details zur OP, AB Dosis, Laborwert, Probe Details...">
+                    </div>
                 </div>
-                <div class="full-width">
+
+                <div class="event-input-row">
                     <button type="submit" class="button-primary">Ereignis hinzufügen</button>
                 </div>
             </form>
@@ -96,11 +118,10 @@
              <button id="clearAllButton" class="button-danger">Alle Ereignisse & Patientendaten löschen</button>
         </section>
 
-
         <section class="card" id="outputSection">
             <h2>Generierte Timeline & Übersichten</h2>
 
-             <div id="timelineSection">
+            <div id="timelineSection">
                 <h3>Timeline</h3>
                 <p><i>Die Timeline ist für die Anzeige und das Kopieren als Bild optimiert.</i></p>
                  <p id="timelineStatus">Ereignisse eingeben, um die Timeline zu generieren.</p>
@@ -122,12 +143,12 @@
                         </div>
                         <button id="copyOpsButton" class="button-copy">OPs kopieren</button>
                     </div>
-                    <div id="germSummary" class="summary-box">
-                        <h4>Übersicht Keim(e)</h4>
-                         <div id="germListContainer" class="summary-list-container">
-                            <ul id="germList"><li>Keine Mikrobiologie eingegeben.</li></ul>
+                    <div id="probeSummary" class="summary-box">
+                        <h4>Übersicht Probenentnahmen</h4>
+                         <div id="probeListContainer" class="summary-list-container">
+                            <ul id="probeList"><li>Keine Proben eingegeben.</li></ul>
                          </div>
-                        <button id="copyGermsButton" class="button-copy">Keime kopieren</button>
+                        <button id="copyProbesButton" class="button-copy">Proben kopieren</button>
                     </div>
                     <div id="antibioticSummary" class="summary-box">
                         <h4>Übersicht Antibiotika</h4>
@@ -139,7 +160,7 @@
                 </div>
              </div>
         </section>
-        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
