@@ -137,4 +137,10 @@ hr.section-divider { border: none; border-top: 1px solid #eee; margin: 30px 0; }
 
      /* General Print SVG styles */
      #timelineSvg { border: 1px solid #aaa; background-color: #fff !important;}
-     .axis-line,
+     .axis-line, .axis-tick line { stroke: #000 !important; }
+     .grid-line { stroke: #ccc !important; stroke-dasharray: none !important;}
+     .axis-tick text, .axis-label, .timeline-text-label, .bar-text-label { fill: #000 !important; font-size: 8pt !important; }
+     .op-marker { fill: #e74c3c !important; stroke: #000 !important; stroke-width: 0.5pt !important; }
+     .antibiotic-bar { fill: #2ecc71 !important; stroke: #000 !important; opacity: 0.6 !important; stroke-width: 0.5pt !important;}
+     /* Removed lab plot print styles */
+}
