@@ -1,102 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Timeline Generator</title>
+    <title>Patienten-Timeline Generator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Patient Timeline Generator</h1>
+        <h1>Patienten-Timeline Generator</h1>
 
         <section class="card">
-            <h2>Patient Information</h2>
+            <h2>Patienteninformationen</h2>
             <div class="form-grid">
                 <div>
-                    <label for="patientName">Name:</label>
+                    <label for="patientName">Name, Vorname:</label>
                     <input type="text" id="patientName" name="patientName">
                 </div>
                 <div>
-                    <label for="patientDob">Date of Birth:</label>
+                    <label for="patientDob">Geburtsdatum:</label>
                     <input type="date" id="patientDob" name="patientDob">
                 </div>
                 <div>
-                    <label for="patientDiagnosis">Diagnosis:</label>
+                    <label for="patientDiagnosis">Diagnose:</label>
                     <input type="text" id="patientDiagnosis" name="patientDiagnosis">
                 </div>
                 <div>
-                    <label for="patientTeam">Responsible Team:</label>
+                    <label for="patientTeam">Zuständiges Team:</label>
                     <input type="text" id="patientTeam" name="patientTeam">
                 </div>
             </div>
+             <button id="copyPatientDataButton" class="button-copy">Patientendaten kopieren</button>
         </section>
 
         <section class="card">
-            <h2>Add Event</h2>
+            <h2>Ereignis hinzufügen</h2>
             <form id="eventForm" class="form-grid">
                 <div>
-                    <label for="eventDate">Date:</label>
+                    <label for="eventDate">Datum:</label>
                     <input type="date" id="eventDate" name="eventDate" required>
                 </div>
                 <div>
-                    <label for="eventType">Event Type:</label>
+                    <label for="eventType">Ereignistyp:</label>
                     <select id="eventType" name="eventType" required>
-                        <option value="">-- Select Type --</option>
+                        <option value="">-- Typ wählen --</option>
                         <option value="OP">Operation (OP)</option>
-                        <option value="Antibiotic Start">Antibiotic Start</option>
-                        <option value="Antibiotic End">Antibiotic End</option>
-                        <option value="Germ Culture">Germ Culture Result</option>
-                        <option value="Lab CRP">Lab: CRP (mg/l)</option>
-                        <option value="Lab Lc">Lab: Leucocytes (G/l)</option>
-                        <option value="Clinical Event">Clinical Event</option>
-                        <option value="Other Note">Other Note</option>
+                        <option value="Antibiotika Start">Antibiotika Start</option>
+                        <option value="Antibiotika Ende">Antibiotika Ende</option>
+                        <option value="Mikrobiologie">Mikrobiologie (Keim)</option>
+                        <option value="Labor CRP">Labor: CRP (mg/l)</option>
+                        <option value="Labor Lc">Labor: Lc (G/l)</option>
+                        <option value="Klinisches Ereignis">Klinisches Ereignis</option>
+                        <option value="Notiz">Notiz</option>
                     </select>
                 </div>
                 <div class="full-width">
-                    <label for="eventDetails">Details / Value:</label>
-                    <input type="text" id="eventDetails" name="eventDetails" required placeholder="e.g., OP Description, Drug Name/Dose, Germ Name/Sensitivity, Lab Value, Event Note">
+                    <label for="eventDetails">Details / Wert:</label>
+                    <input type="text" id="eventDetails" name="eventDetails" required placeholder="z.B. OP-Beschreibung, Medikament/Dosis, Keim/Resistenz, Laborwert, Ereignisbeschreibung">
                 </div>
                 <div class="full-width">
-                    <button type="submit" class="button-primary">Add Event</button>
+                    <button type="submit" class="button-primary">Ereignis hinzufügen</button>
                 </div>
             </form>
         </section>
 
         <section class="card">
-            <h2>Entered Events</h2>
+            <h2>Eingegebene Ereignisse</h2>
             <ul id="eventList">
-                <li>No events added yet.</li>
+                <li>Noch keine Ereignisse hinzugefügt.</li>
             </ul>
-             <button id="clearAllButton" class="button-danger">Clear All Events</button>
+             <button id="clearAllButton" class="button-danger">Alle Ereignisse löschen</button>
         </section>
 
 
         <section class="card">
-            <h2>Generated Timeline & Summaries</h2>
+            <h2>Generierte Timeline & Übersichten</h2>
 
-            <div id="timelineContainer">
+            <div id="timelineSection">
                 <h3>Timeline</h3>
-                 <p id="timelineStatus">Enter events to generate the timeline.</p>
-                <svg id="timelineSvg" width="100%" height="400"></svg>
-            </div>
+                <p><i>Hinweis: Für Präsentationen die Timeline am besten als Screenshot kopieren.</i></p>
+                 <p id="timelineStatus">Ereignisse eingeben, um die Timeline zu generieren.</p>
+                <div id="timelineSvgWrapper">
+                    <svg id="timelineSvg" width="100%" height="450"></svg> </div>
+                 </div>
 
-            <div id="summariesContainer">
-                <h3>Summaries</h3>
+            <div id="summariesSection">
+                <h3>Übersichten</h3>
                 <div id="opSummary">
-                    <h4>Operations (OPs)</h4>
-                    <ul id="opList"><li>No OPs entered.</li></ul>
+                    <h4>Übersicht OPs</h4>
+                    <div id="opListContainer">
+                        <ul id="opList"><li>Keine OPs eingegeben.</li></ul>
+                    </div>
+                    <button id="copyOpsButton" class="button-copy">OPs kopieren</button>
                 </div>
                 <div id="germSummary">
-                    <h4>Germs</h4>
-                    <ul id="germList"><li>No Germ Cultures entered.</li></ul>
+                    <h4>Übersicht Keim(e)</h4>
+                     <div id="germListContainer">
+                        <ul id="germList"><li>Keine Mikrobiologie eingegeben.</li></ul>
+                     </div>
+                    <button id="copyGermsButton" class="button-copy">Keime kopieren</button>
                 </div>
                 <div id="antibioticSummary">
-                    <h4>Antibiotics</h4>
-                    <ul id="antibioticList"><li>No Antibiotics entered.</li></ul>
+                    <h4>Übersicht Antibiotika</h4>
+                    <div id="antibioticListContainer">
+                        <ul id="antibioticList"><li>Keine Antibiotika eingegeben.</li></ul>
+                    </div>
+                    <button id="copyAntibioticsButton" class="button-copy">Antibiotika kopieren</button>
                 </div>
             </div>
-              <button id="printButton" class="button-secondary">Print View</button>
         </section>
 
     </div>
