@@ -9,7 +9,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1200px; /* Adjust as needed */
     margin: 0 auto;
     background-color: #fff;
     padding: 30px;
@@ -91,12 +91,13 @@ input:focus, select:focus {
 }
 
 button {
-    padding: 10px 20px;
+    padding: 10px 15px; /* Adjusted padding */
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.2s ease;
+    font-size: 0.95em; /* Adjusted font size */
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    margin-top: 10px; /* Added default margin */
 }
 
 .button-primary {
@@ -107,20 +108,23 @@ button {
     background-color: #2980b9;
 }
 
-.button-secondary {
-    background-color: #95a5a6;
+.button-copy {
+    background-color: #1abc9c; /* Teal color */
     color: white;
-    margin-top: 20px;
+    margin-right: 5px; /* Space between copy buttons */
 }
-.button-secondary:hover {
-    background-color: #7f8c8d;
+.button-copy:hover {
+    background-color: #16a085;
+}
+.button-copy:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 
 .button-danger {
     background-color: #e74c3c;
     color: white;
-    margin-top: 10px;
     font-size: 0.85em;
     padding: 8px 15px;
 }
@@ -138,6 +142,7 @@ button {
     border: 1px solid #eee;
     border-radius: 4px;
     margin-top: 15px;
+    margin-bottom: 10px; /* Space before clear button */
 }
 
 #eventList li {
@@ -156,6 +161,7 @@ button {
 #eventList li span {
     flex-grow: 1;
     margin-right: 10px;
+    word-break: break-word; /* Prevent long details overflowing */
 }
 
 #eventList .delete-button {
@@ -166,6 +172,8 @@ button {
     padding: 3px 8px;
     font-size: 0.8em;
     cursor: pointer;
+    margin-left: 10px; /* Space from text */
+    flex-shrink: 0; /* Prevent button shrinking */
     transition: background-color 0.2s ease;
 }
 #eventList .delete-button:hover {
@@ -173,15 +181,23 @@ button {
 }
 
 /* Timeline SVG Styles */
-#timelineContainer {
+#timelineSection {
     margin-top: 30px;
-    position: relative; /* Needed for positioning elements within */
+    position: relative;
 }
 
+#timelineSvgWrapper {
+     border: 1px solid #ccc;
+     overflow-x: auto; /* Add scroll if content overflows horizontally */
+     overflow-y: hidden; /* Hide vertical overflow if fixed height */
+     background-color: #fdfdfd;
+     margin-bottom: 10px;
+}
+
+
 #timelineSvg {
-    border: 1px solid #ccc;
-    background-color: #fdfdfd;
     display: block; /* Remove extra space below SVG */
+    min-width: 800px; /* Ensure a minimum width */
 }
 
 /* Timeline Axis */
@@ -198,12 +214,13 @@ button {
 .axis-tick text {
     fill: #555;
     font-size: 10px;
+    text-anchor: middle;
 }
 
 .axis-label {
     fill: #333;
-    font-size: 12px;
-    text-anchor: middle;
+    font-size: 11px; /* Slightly larger axis labels */
+    text-anchor: start; /* Align to the start (left) */
 }
 
 /* Timeline Event Markers */
@@ -211,24 +228,28 @@ button {
     fill: #e74c3c; /* Red */
     stroke: #c0392b;
     stroke-width: 1;
+    cursor: pointer;
 }
 
 .event-marker {
     fill: #f1c40f; /* Yellow */
     stroke: #f39c12;
     stroke-width: 1;
+     cursor: pointer;
 }
 
 .note-marker {
     fill: #bdc3c7; /* Grey */
     stroke: #95a5a6;
     stroke-width: 1;
+     cursor: pointer;
 }
 
 .marker-label {
     font-size: 10px;
     fill: #333;
     text-anchor: middle;
+    pointer-events: none; /* Don't block mouse events on label */
 }
 
 /* Timeline Bars (Antibiotics, Germs) */
@@ -237,13 +258,14 @@ button {
     opacity: 0.7;
     stroke: #27ae60;
     stroke-width: 0.5;
+     cursor: pointer;
 }
 
-.germ-bar { /* Or use markers if preferred */
+.germ-marker { /* Changed from germ-bar */
     fill: #f39c12; /* Orange */
-    opacity: 0.7;
     stroke: #e67e22;
-    stroke-width: 0.5;
+    stroke-width: 1;
+     cursor: pointer;
 }
 
 .bar-label {
@@ -261,17 +283,18 @@ button {
 
 
 /* Timeline Lab Value Plots */
-.crp-plot path, .crp-point {
+.crp-plot path {
     stroke: #3498db; /* Blue */
     fill: none;
     stroke-width: 1.5;
 }
-.crp-point {
+ .crp-point {
    fill: #3498db;
    stroke-width: 1;
+   cursor: pointer;
 }
 
-.lc-plot path, .lc-point {
+.lc-plot path {
     stroke: #9b59b6; /* Purple */
     fill: none;
     stroke-width: 1.5;
@@ -279,129 +302,101 @@ button {
 .lc-point {
    fill: #9b59b6;
    stroke-width: 1;
+   cursor: pointer;
 }
 
 .lab-value-label {
     font-size: 9px;
     fill: #555;
     text-anchor: middle;
+     pointer-events: none;
 }
 
 /* Tooltip */
 .tooltip {
     position: absolute;
-    text-align: center;
+    text-align: left; /* Align text left */
     padding: 8px;
     font-size: 12px;
-    background: #333;
+    background: rgba(51, 51, 51, 0.9); /* Darker, slightly transparent */
     color: #fff;
     border: 0px;
     border-radius: 4px;
     pointer-events: none; /* Don't block mouse events */
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s ease-in-out;
     white-space: pre-wrap; /* Allow line breaks */
-    max-width: 250px;
+    max-width: 280px; /* Slightly wider */
+    z-index: 10; /* Ensure tooltip is on top */
 }
 
 /* Summary List Styles */
-#summariesContainer ul {
-    list-style-type: none;
-    padding-left: 0;
+#summariesSection {
+    margin-top: 30px;
+    display: grid; /* Layout summaries side-by-side on wider screens */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
 }
 
-#summariesContainer li {
+#summariesSection > div { /* Style each summary box */
+     border: 1px solid #eee;
+     padding: 15px;
+     border-radius: 4px;
+}
+
+
+#opListContainer, #germListContainer, #antibioticListContainer {
+     max-height: 250px; /* Limit height and allow scroll */
+     overflow-y: auto;
+     margin-bottom: 10px; /* Space before copy button */
+}
+
+
+#summariesSection ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 0; /* Remove default margin */
+}
+
+#summariesSection li {
     background-color: #ecf0f1;
     margin-bottom: 8px;
     padding: 8px 12px;
     border-radius: 3px;
     font-size: 0.95em;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid #bdc3c7; /* Default border */
+    line-height: 1.4;
 }
+
+/* Specific border colors matching timeline elements */
 #opSummary li { border-left-color: #e74c3c; }
 #germSummary li { border-left-color: #f39c12; }
 #antibioticSummary li { border-left-color: #2ecc71; }
 
-#summariesContainer li .date {
+#summariesSection li .date {
     font-weight: bold;
-    margin-right: 10px;
+    margin-right: 8px; /* Slightly less margin */
     color: #555;
+    display: inline-block; /* Prevent awkward wrapping */
+    min-width: 80px; /* Ensure date alignment */
 }
 
-/* Print Styles */
-@media print {
-    body {
-        padding: 0;
-        background-color: #fff;
-        color: #000; /* Ensure black text for printing */
-    }
-    .container {
-        box-shadow: none;
-        border: none;
-        padding: 10px;
-        max-width: 100%;
-    }
-    section.card {
-        box-shadow: none;
-        border: 1px solid #ccc; /* Add border for structure */
-        page-break-inside: avoid; /* Try to keep sections together */
-         padding: 15px;
-    }
-    /* Hide input forms and buttons */
-    #eventForm, #clearAllButton, #printButton, h1, section.card:nth-of-type(2), section.card:nth-of-type(3) h2, #eventList {
-        display: none !important;
-    }
-
-     section.card:nth-of-type(3) { /* Entered Events Section */
-        border: none;
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
-     }
-
-     /* Ensure timeline and summaries are visible */
-     #timelineContainer, #summariesContainer {
-         display: block !important;
-         margin-top: 10px;
-     }
-
-    h2 { /* Style Patient Info header for print */
-        border-bottom: 1px solid #ccc;
-        font-size: 1.2em;
-    }
-    h3, h4 { /* Style Output headers for print */
-        color: #000;
-         margin-top: 15px;
-         margin-bottom: 5px;
-         font-size: 1.1em;
-    }
-
-     #timelineSvg {
-        border: 1px solid #aaa; /* Make border visible */
-        height: auto !important; /* Allow SVG to scale naturally if needed */
-     }
-     .axis-line, .axis-tick line { stroke: #000; }
-     .axis-tick text, .axis-label, .marker-label, .lab-value-label, .bar-label-dark { fill: #000; }
-     .bar-label { fill: #000; } /* Use black text on bars for print */
-
-     .op-marker { fill: #e74c3c; stroke: #000; } /* Keep colors, add black stroke */
-     .event-marker { fill: #f1c40f; stroke: #000; }
-     .note-marker { fill: #bdc3c7; stroke: #000; }
-     .antibiotic-bar { fill: #2ecc71; stroke: #000; }
-     .germ-bar { fill: #f39c12; stroke: #000; }
-     .crp-plot path, .crp-point { stroke: #3498db; fill: #3498db; stroke-width: 1; }
-     .lc-plot path, .lc-point { stroke: #9b59b6; fill: #9b59b6; stroke-width: 1; }
-
-    #summariesContainer li {
-        background-color: #fff; /* No background */
-        border: 1px solid #ccc; /* Add border */
-        border-left-width: 4px;
-        padding: 5px 8px;
-        font-size: 0.9em;
-    }
-     #summariesContainer li .date { color: #000; }
-
-    /* Ensure full width */
-     html, body { width: 100%; height: auto; }
-
+/* Clipboard HTML Table Styles (won't be visible on page) */
+.clipboard-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 10pt; /* Use points for better Word/PPT scaling */
+}
+.clipboard-table th, .clipboard-table td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: left;
+}
+.clipboard-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.clipboard-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
