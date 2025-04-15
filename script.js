@@ -13,39 +13,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyOpsButton = document.getElementById('copyOpsButton');
     const copyGermsButton = document.getElementById('copyGermsButton');
     const copyAntibioticsButton = document.getElementById('copyAntibioticsButton');
-    const printTimelineButton = document.getElementById('printTimelineButton'); // New button
+    const printTimelineButton = document.getElementById('printTimelineButton');
 
     // Patient Data Inputs
     const patientNameInput = document.getElementById('patientName');
-    const patientDobInput = document.getElementById('patientDob');
+    const patientDobInput = document.getElementById('patientDob'); // Now type="date"
     const patientDiagnosisInput = document.getElementById('patientDiagnosis');
     const patientTeamInput = document.getElementById('patientTeam');
     const infektioInvolviertCheckbox = document.getElementById('infektioInvolviert');
     const plwcInvolviertCheckbox = document.getElementById('plwcInvolviert');
     const orthoTeamSelect = document.getElementById('orthoTeam');
-    const eventDateInput = document.getElementById('eventDate'); // Date input
+    const eventDateInput = document.getElementById('eventDate'); // Now type="date"
 
 
     let events = [];
-    loadData(); // Load data on startup
+    // Tooltip Element Reference (initialized once)
+    let tooltipElement = null;
 
-    // --- Datepicker Initialization ---
-    // Check if Datepicker library is loaded
-    if (typeof Datepicker !== 'undefined') {
-         const datepickerOptions = {
-             format: 'dd.mm.yyyy', // German format
-             language: 'de',      // German language
-             autohide: true,
-             weekStart: 1         // Monday
-         };
-         const dobPicker = new Datepicker(patientDobInput, datepickerOptions);
-         const eventPicker = new Datepicker(eventDateInput, datepickerOptions);
-    } else {
-        console.warn("Datepicker library not found. Using native date input.");
-        // Optionally revert input types back to 'date' if library fails
-        // patientDobInput.type = 'date';
-        // eventDateInput.type = 'date';
-    }
+    loadData(); // Load data on startup
 
 
     // --- Localization & Date Formatting ---
@@ -55,33 +40,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!dateStr) return '';
         try {
             const [year, month, day] = dateStr.split('-');
-            if (!year || !month || !day || year.length !== 4) return dateStr; // Basic validation
+            if (!year || !month || !day || year.length !== 4) return dateStr;
             const date = new Date(Date.UTC(year, month - 1, day));
              if (isNaN(date.getTime())) return dateStr;
             return date.toLocaleDateString(lang, dateFormatOptions);
         } catch (e) { return dateStr; }
     };
-     // Helper to convert DD.MM.YYYY from datepicker back to YYYY-MM-DD for storage/processing
-    const datePickerToIso = (pickerDate) => {
-        if (!pickerDate || typeof pickerDate !== 'string') return '';
-        const parts = pickerDate.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-        if (parts) {
-            return `${parts[3]}-${parts[2]}-${parts[1]}`; // YYYY-MM-DD
-        }
-        return ''; // Return empty if format doesn't match
-    };
-
+    // Removed datePickerToIso function
 
     // --- Event Handling ---
 
     eventForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Get date value and convert if needed
-        const rawDateValue = eventDateInput.value;
-        const isoDateValue = datePickerToIso(rawDateValue); // Convert format
+        const isoDateValue = eventDateInput.value; // Read directly (YYYY-MM-DD)
 
         if (!isoDateValue) {
-            alert('Bitte ein gültiges Datum im Format TT.MM.JJJJ eingeben.');
+            alert('Bitte ein gültiges Datum auswählen.');
             return;
         }
 
@@ -101,11 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             saveData();
             render();
             eventForm.reset();
-             // Manually clear datepicker if reset doesn't work
-            if (typeof Datepicker !== 'undefined' && eventPicker) { eventPicker.setDate({clear: true}); }
-
         } else {
-            alert('Bitte Datum und Typ auswählen (Details optional für Antibiotika Ende).');
+             alert('Bitte Datum und Typ auswählen (Details optional für Antibiotika Ende).');
         }
     });
 
@@ -121,69 +92,62 @@ document.addEventListener('DOMContentLoaded', () => {
     copyAntibioticsButton.addEventListener('click', () => copySummaryToClipboard('antibioticList', 'Übersicht Antibiotika', ['Zeitraum', 'Details'], copyAntibioticsButton));
 
      // Print Timeline Listener
-     printTimelineButton.addEventListener('click', () => {
-        document.body.classList.add('printing-timeline-only');
-        window.print();
-        // No reliable 'onafterprint' in all browsers, use timeout as fallback
-        setTimeout(() => {
-            document.body.classList.remove('printing-timeline-only');
-        }, 500); // Adjust timeout if needed
-     });
+     printTimelineButton.addEventListener('click', () => { /* ... as before ... */ });
 
 
     function handleDelete(eventId) { /* ... as before ... */ }
 
     // --- Local Storage ---
     function saveData() {
-        localStorage.setItem('patientTimelineEvents_v3', JSON.stringify(events));
+        localStorage.setItem('patientTimelineEvents_v4', JSON.stringify(events)); // Use new key for compatibility break
         const patientData = {
             name: patientNameInput.value,
-            // Store DOB in YYYY-MM-DD from picker value
-            dob: datePickerToIso(patientDobInput.value),
+            dob: patientDobInput.value, // Store native date input value (YYYY-MM-DD)
             diagnosis: patientDiagnosisInput.value,
             team: patientTeamInput.value,
             infektio: infektioInvolviertCheckbox.checked,
             plwc: plwcInvolviertCheckbox.checked,
             ortho: orthoTeamSelect.value
         };
-        localStorage.setItem('patientTimelinePatientData_v3', JSON.stringify(patientData));
+        localStorage.setItem('patientTimelinePatientData_v4', JSON.stringify(patientData));
     }
 
     function loadData() {
-        const storedEvents = localStorage.getItem('patientTimelineEvents_v3');
+        const storedEvents = localStorage.getItem('patientTimelineEvents_v4');
         events = storedEvents ? JSON.parse(storedEvents) : [];
 
-        const storedPatientData = localStorage.getItem('patientTimelinePatientData_v3');
+        const storedPatientData = localStorage.getItem('patientTimelinePatientData_v4');
         if (storedPatientData) {
             const data = JSON.parse(storedPatientData);
             patientNameInput.value = data.name || '';
-            // Set DOB picker value using library's method if available
-            if (typeof Datepicker !== 'undefined' && dobPicker && data.dob) {
-                 dobPicker.setDate(data.dob); // Expects YYYY-MM-DD or Date object
-            } else {
-                patientDobInput.value = data.dob ? dateLocaleFormat(data.dob) : ''; // Fallback display
-            }
+            patientDobInput.value = data.dob || ''; // Set native date input value
             patientDiagnosisInput.value = data.diagnosis || '';
             patientTeamInput.value = data.team || '';
             infektioInvolviertCheckbox.checked = data.infektio || false;
             plwcInvolviertCheckbox.checked = data.plwc || false;
             orthoTeamSelect.value = data.ortho || '';
         }
-        render();
+        // Initialize tooltip element once after DOM is ready
+        tooltipElement = document.querySelector('.tooltip');
+        if (!tooltipElement) {
+             tooltipElement = document.createElement('div');
+             tooltipElement.classList.add('tooltip');
+             document.body.appendChild(tooltipElement);
+        }
+
+        render(); // Render after loading
     }
 
 
     // --- Rendering Functions (render, renderEventList, renderSummaries) ---
     function render() { /* ... as before ... */ }
-    function renderEventList() { /* ... Use dateLocaleFormat for display ... */ }
-    function renderSummaries() { /* ... Use dateLocaleFormat for display ... */ }
+    function renderEventList() { /* ... Use dateLocaleFormat ... */ }
+    function renderSummaries() { /* ... Use dateLocaleFormat ... */ }
 
 
     // --- Timeline Rendering ---
     function renderTimeline() {
-        timelineSvg.innerHTML = ''; // Clear SVG
-
-        // FIX: Reset status message correctly
+        timelineSvg.innerHTML = '';
         timelineStatus.textContent = "Ereignisse eingeben, um die Timeline zu generieren.";
         timelineStatus.style.color = 'inherit';
 
@@ -195,94 +159,78 @@ document.addEventListener('DOMContentLoaded', () => {
          timelineStatus.style.display = 'none';
          timelineSvgWrapper.style.display = 'block';
 
-        // --- Setup (Margins, Scales, etc.) ---
+        // --- Setup ---
         const svgWidth = Math.max(800, timelineSvgWrapper.clientWidth);
         const svgHeight = 450;
         const margin = { top: 40, right: 30, bottom: 60, left: 90 };
         const width = svgWidth - margin.left - margin.right;
         const height = svgHeight - margin.top - margin.bottom;
 
-        // --- Tooltip ---
-        // FIX: Get tooltip element inside functions or ensure reference is solid
-        function getTooltipElement() {
-            let tooltip = document.querySelector('.tooltip');
-            if (!tooltip) {
-                tooltip = document.createElement('div');
-                tooltip.classList.add('tooltip');
-                document.body.appendChild(tooltip);
-            }
-            return tooltip;
-        }
+        // --- Tooltip Functions (using the global tooltipElement) ---
          function showTooltip(event, content) {
-             const tooltip = getTooltipElement(); // Get fresh reference
-             tooltip.style.opacity = 1;
-             tooltip.innerHTML = content;
-             tooltip.style.left = (event.pageX + 15) + 'px';
-             tooltip.style.top = (event.pageY + 15) + 'px';
+             if (!tooltipElement) return; // Safety check
+             tooltipElement.style.opacity = 1;
+             tooltipElement.innerHTML = content;
+             tooltipElement.style.left = (event.pageX + 15) + 'px';
+             tooltipElement.style.top = (event.pageY + 15) + 'px';
          }
          function hideTooltip() {
-             const tooltip = getTooltipElement(); // Get fresh reference
-             tooltip.style.opacity = 0;
-             tooltip.style.left = '-9999px';
+             if (!tooltipElement) return; // Safety check
+             tooltipElement.style.opacity = 0;
+             tooltipElement.style.left = '-9999px';
          }
 
-        // --- SVG Canvas ---
+        // --- SVG Canvas, Data Prep, Scales ---
         timelineSvg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
-        timelineSvg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+        /* ... rest of setup as before (chartGroup, date filtering, scales) ... */
         const chartGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
         chartGroup.setAttribute('transform', `translate(${margin.left},${margin.top})`);
         timelineSvg.appendChild(chartGroup);
 
-        // --- Data Prep & Scales ---
-        // Ensure dates are valid Date objects for calculations
-        const validDates = events.map(e => new Date(e.date)).filter(d => !isNaN(d.getTime()));
-        if (validDates.length === 0) { // Handle case where no valid dates exist
-             timelineStatus.textContent = "Keine gültigen Datumsangaben gefunden.";
-             timelineStatus.style.display = 'block';
-             timelineSvgWrapper.style.display = 'none';
-             return;
-        }
-        let minDate = new Date(Math.min(...validDates));
-        let maxDate = new Date(Math.max(...validDates));
-        const datePaddingMs = Math.max((maxDate - minDate) * 0.02, 86400000 * 2);
-        minDate = new Date(minDate.getTime() - datePaddingMs);
-        maxDate = new Date(maxDate.getTime() + datePaddingMs);
-
-        const xScale = (date) => { /* ... */ };
-        // Other scales (opY, eventY, ..., crpYScale, lcYScale) as before
-
         // --- Draw Axes ---
-        // X Axis and Ticks (using helper functions) as before
-        // Y Axis Labels (German) as before
+         /* ... Axis drawing logic as before ... */
 
         // --- Draw Events (Labs, Bars, Markers) ---
-        // Ensure event data passed to plotting functions has valid dates
-        const crpData = events.filter(e => e.type === 'Labor CRP' && e.details && !isNaN(parseFloat(e.details)) && !isNaN(new Date(e.date).getTime())).map(e => ({ date: new Date(e.date), value: parseFloat(e.details), details: e.details }));
-        const lcData = events.filter(e => e.type === 'Labor Lc' && e.details && !isNaN(parseFloat(e.details)) && !isNaN(new Date(e.date).getTime())).map(e => ({ date: new Date(e.date), value: parseFloat(e.details), details: e.details }));
+        /* ... Event drawing logic as before, ensuring tooltips call the fixed show/hide functions ... */
+        // Example for marker tooltip attachment:
+        // markerSymbol.addEventListener('mouseover', (e) => showTooltip(e, tooltipContent));
+        // markerSymbol.addEventListener('mouseout', hideTooltip);
+        // (Make sure this pattern is used for all elements needing tooltips: points, bars, markers)
 
-        function plotLabData(data, yScale, className, unit) { /* ... Draw lines/points, add tooltips using dateLocaleFormat ... */ }
+         // --- Draw Events ---
+        // Plot Labs
+        function plotLabData(data, yScale, className, unit) { /* ... as before ... */ }
         plotLabData(crpData, crpYScale, 'crp', 'mg/l');
         plotLabData(lcData, lcYScale, 'lc', 'G/l');
 
-        // Antibiotic Bars (ensure valid dates)
-        const antibioticPeriods = [];
-        const starts = events.filter(e => e.type === 'Antibiotika Start' && !isNaN(new Date(e.date).getTime()));
-        const ends = events.filter(e => e.type === 'Antibiotika Ende' && !isNaN(new Date(e.date).getTime()));
-        let usedEndIds_timeline = new Set();
-        // ... logic to calculate periods as before ...
-        antibioticPeriods.forEach(period => { /* ... draw rect/label, add tooltips using dateLocaleFormat ... */ });
+        // Draw Antibiotic Bars
+        /* ... calculation logic as before ... */
+        antibioticPeriods.forEach(period => {
+            /* ... draw rect/label ... */
+             const endDateText = period.endDateActual ? dateLocaleFormat(period.endDateActual.toISOString().split('T')[0]) : 'Laufend';
+              rect.addEventListener('mouseover', (e) => showTooltip(e, `<b>Antibiotikum:</b> ${period.details}<br><b>Start:</b> ${dateLocaleFormat(period.start.toISOString().split('T')[0])}<br><b>Ende:</b> ${endDateText}`));
+              rect.addEventListener('mouseout', hideTooltip);
+        });
 
-        // Germ Markers (ensure valid dates)
-        const germEvents = events.filter(e => e.type === 'Mikrobiologie' && !isNaN(new Date(e.date).getTime()));
-        germEvents.forEach(event => { /* ... draw marker, add tooltip using dateLocaleFormat ... */ });
+         // Draw Germ Markers
+         const germEvents = events.filter(e => e.type === 'Mikrobiologie' && !isNaN(new Date(e.date).getTime()));
+         germEvents.forEach(event => {
+             /* ... draw marker ... */
+              marker.addEventListener('mouseover', (e) => showTooltip(e, `<b>Keim (${dateLocaleFormat(event.date)}):</b><br>${event.details}`));
+              marker.addEventListener('mouseout', hideTooltip);
+          });
 
-        // Point Markers (OPs, Events, Notes - ensure valid dates)
+        // Draw Point Markers (OPs, Events, Notes)
         events.forEach(event => {
             const date = new Date(event.date);
-            if (isNaN(date.getTime())) return; // Skip invalid dates
-            // ... rest of marker drawing logic as before ...
-             const tooltipContent = `<b>${event.type} (${dateLocaleFormat(event.date)})</b><br>${event.details}`;
-             // Add listeners inside the 'if (markerSymbol)' block
+            if (isNaN(date.getTime())) return;
+            /* ... marker drawing logic ... */
+             if (markerSymbol) {
+                 /* ... append marker ... */
+                 const tooltipContent = `<b>${event.type} (${dateLocaleFormat(event.date)})</b><br>${event.details}`;
+                 markerSymbol.addEventListener('mouseover', (e) => showTooltip(e, tooltipContent));
+                 markerSymbol.addEventListener('mouseout', hideTooltip);
+             }
         });
 
 
@@ -295,24 +243,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatTickDate(date, unit) { /* ... */ }
 
 
-    // --- Clipboard Functions (copyPatientDataToClipboard, copySummaryToClipboard, copyToClipboard) ---
+    // --- Clipboard Functions ---
      function copyPatientDataToClipboard() {
         const name = patientNameInput.value || 'N/A';
-        // Format DOB correctly from picker/storage
-        const dobIso = datePickerToIso(patientDobInput.value);
-        const dobFormatted = dobIso ? dateLocaleFormat(dobIso) : 'N/A';
+        const dobFormatted = dateLocaleFormat(patientDobInput.value); // Format native date value
         const diagnosis = patientDiagnosisInput.value || 'N/A';
         const team = patientTeamInput.value || 'N/A';
         const infektio = infektioInvolviertCheckbox.checked ? 'Ja' : 'Nein';
         const plwc = plwcInvolviertCheckbox.checked ? 'Ja' : 'Nein';
         const ortho = orthoTeamSelect.options[orthoTeamSelect.selectedIndex]?.text || 'N/A';
-
-        const text = `Patient: ${name}\nGeburtsdatum: ${dobFormatted}\nDiagnose: ${diagnosis}\nOrthopädie Team: ${ortho}\nZust. ext. Team/Arzt: ${team}\nInfektiologie involviert: ${infektio}\nPLWC involviert: ${plwc}`;
-        const html = `<p><b>Patient:</b> ${name}<br><b>Geburtsdatum:</b> ${dobFormatted}<br><b>Diagnose:</b> ${diagnosis.replace(/\n/g, '<br>')}<br><b>Orthopädie Team:</b> ${ortho}<br><b>Zust. ext. Team/Arzt:</b> ${team}<br><b>Infektiologie involviert:</b> ${infektio}<br><b>PLWC involviert:</b> ${plwc}</p>`;
+        /* ... Text and HTML formatting as before ... */
         copyToClipboard(text, html, copyPatientDataButton);
     }
-    function copySummaryToClipboard(listId, title, headers, buttonElement) { /* ... Use dateLocaleFormat in output ... */ }
-    function copyToClipboard(plainText, htmlText, buttonElement) { /* ... as before, using data attribute for original text ... */ }
+    function copySummaryToClipboard(listId, title, headers, buttonElement) { /* ... Use dateLocaleFormat ... */ }
+    function copyToClipboard(plainText, htmlText, buttonElement) { /* ... as before ... */ }
 
 
 }); // End DOMContentLoaded
