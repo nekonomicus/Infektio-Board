@@ -38,6 +38,9 @@ section.card {
 /* Form Styles */
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px 20px; align-items: start; }
 .patient-info-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 768px) { /* Stack patient info on smaller screens */
+    .patient-info-grid { grid-template-columns: 1fr; }
+}
 .patient-info-grid .diagnose-field { grid-column: 1 / -1; }
 .form-grid > .full-width { grid-column: 1 / -1; }
 
@@ -47,7 +50,7 @@ textarea { resize: vertical; min-height: 60px; }
 input:focus, select:focus, textarea:focus { border-color: #3498db; outline: none; box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); }
 
 /* Checkbox Styling */
-.checkbox-group { display: flex; flex-direction: column; gap: 5px; align-self: center; }
+.checkbox-group { display: flex; flex-direction: column; gap: 5px; align-self: start; /* Align top */ padding-top: 25px; /* Align with other labels roughly */ }
 .checkbox-group > label { margin-bottom: 8px; }
 .checkbox-group div { display: flex; align-items: center; }
 .checkbox-group input[type="checkbox"] { width: auto; margin-right: 8px; }
@@ -130,16 +133,20 @@ hr.section-divider { border: none; border-top: 1px solid #eee; margin: 30px 0; }
     section.card { box-shadow: none; border: none; page-break-inside: avoid; padding: 0; margin-bottom: 10mm; }
 
     /* Default: Hide everything except the specific print section */
-    body > *:not(#outputSection) { display: none !important; }
-    #outputSection { display: block !important; }
-    #summariesSection { display: none !important; }
-    #timelineSection h3, #timelineSection p { display: none !important; }
-    button { display: none !important; } /* Hide ALL buttons by default in print */
-     hr.section-divider { display: none !important;}
+    body:not(.printing-timeline-only) > *:not(#outputSection) { display: none !important; }
+    body:not(.printing-timeline-only) #outputSection { display: block !important; }
+     /* Hide non-timeline parts when printing normally (if ever needed) */
+    body:not(.printing-timeline-only) #timelineSection { display: none !important; }
+    body:not(.printing-timeline-only) #summariesSection { display: block !important; } /* Show summaries if not timeline */
+    body:not(.printing-timeline-only) #summariesSection .button-copy {display: none !important;} /* Hide copy buttons in summaries */
+
 
     /* Styles ONLY when printing timeline */
-    body.printing-timeline-only #summariesSection { display: none !important; }
-    body.printing-timeline-only #timelineSection { display: block !important; width: 100%; border: none; padding: 0; margin: 0; page-break-inside: auto; }
+     body.printing-timeline-only > *:not(#outputSection) { display: none !important; } /* Hide non-output */
+     body.printing-timeline-only #outputSection > *:not(#timelineSection){ display: none !important; } /* Hide summaries */
+
+    body.printing-timeline-only #timelineSection { display: block !important; width: 100%; border: none; padding: 0; margin: 0; page-break-inside: avoid; }
+     body.printing-timeline-only #timelineSection h3, body.printing-timeline-only #timelineSection p { display: none !important; } /* Hide title/hint */
      body.printing-timeline-only #timelineSvgWrapper { border: none; overflow: visible; }
       body.printing-timeline-only #timelineSvg { min-width: unset; width: 100%; height: auto; }
 
@@ -157,4 +164,6 @@ hr.section-divider { border: none; border-top: 1px solid #eee; margin: 30px 0; }
      .lc-plot path, .lc-point { stroke: #9b59b6 !important; fill: #9b59b6 !important; stroke-width: 1 !important; }
      .crp-point, .lc-point { r: 2; }
      .tooltip { display: none !important; }
+      button { display: none !important; } /* Hide ALL buttons in print */
+      hr.section-divider { display: none !important;}
 }
