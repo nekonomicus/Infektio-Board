@@ -17,33 +17,14 @@ body {
     border-radius: 8px;
 }
 
-h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 10px;
+h1, h2, h3, h4 {
+    color: #2c3e50; /* Consistent header color */
 }
 
-h2 {
-    color: #34495e;
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
-}
-
-h3 {
-    color: #3498db;
-    margin-top: 30px;
-    margin-bottom: 15px;
-}
-
-h4 {
-    color: #2980b9;
-    margin-top: 0; /* Removed top margin for summary titles */
-    margin-bottom: 10px;
-}
+h1 { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+h2 { margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+h3 { color: #3498db; margin-top: 30px; margin-bottom: 15px; }
+h4 { color: #2980b9; margin-top: 0; margin-bottom: 10px; }
 
 section.card {
     background-color: #ffffff;
@@ -55,419 +36,161 @@ section.card {
 }
 
 /* Form Styles */
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px 20px; /* Row and column gap */
-    align-items: start; /* Align items to the start of their grid area */
-}
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px 20px; align-items: start; }
+.patient-info-grid { grid-template-columns: repeat(3, 1fr); }
+.patient-info-grid .diagnose-field { grid-column: 1 / -1; }
+.form-grid > .full-width { grid-column: 1 / -1; }
 
-/* Specific grid for patient info to handle multi-column */
-.patient-info-grid {
-     grid-template-columns: repeat(3, 1fr); /* Three columns */
-}
-
-.patient-info-grid .diagnose-field {
-    grid-column: 1 / -1; /* Span all columns */
-}
-
-.form-grid > .full-width {
-    grid-column: 1 / -1; /* Span full width */
-}
-
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-    font-size: 0.9em;
-}
-
-input[type="text"],
-input[type="date"],
-select,
-textarea { /* Added textarea */
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 0.95em;
-    font-family: inherit; /* Ensure textarea uses same font */
-}
-
-textarea {
-    resize: vertical; /* Allow vertical resize only */
-    min-height: 60px; /* Minimum height for textarea */
-}
-
-input:focus, select:focus, textarea:focus {
-    border-color: #3498db;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
+label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 0.9em; }
+input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.95em; font-family: inherit; }
+textarea { resize: vertical; min-height: 60px; }
+input:focus, select:focus, textarea:focus { border-color: #3498db; outline: none; box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); }
 
 /* Checkbox Styling */
-.checkbox-group {
-    display: flex;
-    flex-direction: column; /* Stack label and checkboxes */
-    gap: 5px; /* Space between items */
-    align-self: center; /* Vertically center in grid cell */
-}
-.checkbox-group > label { /* Main label for the group */
-     margin-bottom: 8px; /* More space below main label */
-}
+.checkbox-group { display: flex; flex-direction: column; gap: 5px; align-self: center; }
+.checkbox-group > label { margin-bottom: 8px; }
+.checkbox-group div { display: flex; align-items: center; }
+.checkbox-group input[type="checkbox"] { width: auto; margin-right: 8px; }
+.checkbox-group label { margin-bottom: 0; font-weight: normal; font-size: 0.95em; }
 
-.checkbox-group div { /* Container for each checkbox+label */
-    display: flex;
-    align-items: center;
-}
+/* Buttons */
+button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.95em; transition: background-color 0.2s ease, opacity 0.2s ease; margin-top: 10px; }
+.button-primary { background-color: #3498db; color: white; }
+.button-primary:hover { background-color: #2980b9; }
+.button-secondary { background-color: #95a5a6; color: white; } /* For Print */
+.button-secondary:hover { background-color: #7f8c8d; }
+.button-copy { background-color: #1abc9c; color: white; margin-right: 5px; }
+.button-copy:hover { background-color: #16a085; }
+.button-copy:disabled { opacity: 0.5; cursor: not-allowed; }
+.button-danger { background-color: #e74c3c; color: white; font-size: 0.85em; padding: 8px 15px; }
+.button-danger:hover { background-color: #c0392b; }
 
-.checkbox-group input[type="checkbox"] {
-    width: auto; /* Override default width */
-    margin-right: 8px; /* Space between checkbox and its label */
-}
-.checkbox-group label { /* Label next to checkbox */
-     margin-bottom: 0; /* Reset default bottom margin */
-     font-weight: normal; /* Normal weight for checkbox labels */
-     font-size: 0.95em;
-}
+/* Event List */
+#eventList { list-style-type: none; padding: 0; max-height: 300px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; margin-top: 15px; margin-bottom: 10px; }
+#eventList li { padding: 10px 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; }
+#eventList li:last-child { border-bottom: none; }
+#eventList li span { flex-grow: 1; margin-right: 10px; word-break: break-word; }
+#eventList .delete-button { background-color: #e74c3c; color: white; border: none; border-radius: 3px; padding: 3px 8px; font-size: 0.8em; cursor: pointer; margin-left: 10px; flex-shrink: 0; transition: background-color 0.2s ease; }
+#eventList .delete-button:hover { background-color: #c0392b; }
 
-
-button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.95em;
-    transition: background-color 0.2s ease, opacity 0.2s ease;
-    margin-top: 10px;
-}
-
-.button-primary {
-    background-color: #3498db;
-    color: white;
-}
-.button-primary:hover {
-    background-color: #2980b9;
-}
-
-.button-copy {
-    background-color: #1abc9c;
-    color: white;
-    margin-right: 5px;
-}
-.button-copy:hover {
-    background-color: #16a085;
-}
-.button-copy:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-
-.button-danger {
-    background-color: #e74c3c;
-    color: white;
-    font-size: 0.85em;
-    padding: 8px 15px;
-}
-.button-danger:hover {
-    background-color: #c0392b;
-}
-
-
-/* Event List Styles */
-#eventList {
-    list-style-type: none;
-    padding: 0;
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
-
-#eventList li {
-    padding: 10px 15px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-}
-
-#eventList li:last-child {
-    border-bottom: none;
-}
-
-#eventList li span {
-    flex-grow: 1;
-    margin-right: 10px;
-    word-break: break-word;
-}
-
-#eventList .delete-button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 3px 8px;
-    font-size: 0.8em;
-    cursor: pointer;
-    margin-left: 10px;
-    flex-shrink: 0;
-    transition: background-color 0.2s ease;
-}
-#eventList .delete-button:hover {
-    background-color: #c0392b;
-}
-
-/* Timeline SVG Styles */
-#timelineSection {
-    margin-top: 30px;
-    position: relative;
-}
-
-#timelineSvgWrapper {
-     border: 1px solid #ccc;
-     overflow-x: auto; /* Add scroll if content overflows horizontally */
-     overflow-y: hidden; /* Hide vertical overflow if fixed height */
-     background-color: #fdfdfd;
-     margin-bottom: 10px;
-}
-
-
-#timelineSvg {
-    display: block;
-    min-width: 800px;
-}
-
-/* Timeline Axis */
-.axis-line {
-    stroke: #555;
-    stroke-width: 2;
-}
-
-.axis-tick line {
-    stroke: #ccc;
-    stroke-width: 1;
-}
-
-.axis-tick text {
-    fill: #555;
-    font-size: 10px;
-    text-anchor: middle;
-}
-
-.axis-label {
-    fill: #333;
-    font-size: 11px;
-    text-anchor: end; /* Anchor right for Y labels */
-}
-
-/* Timeline Event Markers */
-.op-marker {
-    fill: #e74c3c;
-    stroke: #c0392b;
-    stroke-width: 1;
-    cursor: pointer;
-}
-
-.event-marker {
-    fill: #f1c40f;
-    stroke: #f39c12;
-    stroke-width: 1;
-     cursor: pointer;
-}
-
-.note-marker {
-    fill: #bdc3c7;
-    stroke: #95a5a6;
-    stroke-width: 1;
-     cursor: pointer;
-}
-
-.marker-label {
-    font-size: 10px;
-    fill: #333;
-    text-anchor: middle;
-    pointer-events: none;
-}
-
-/* Timeline Bars */
-.antibiotic-bar {
-    fill: #2ecc71;
-    opacity: 0.7;
-    stroke: #27ae60;
-    stroke-width: 0.5;
-     cursor: pointer;
-}
-
-/* Changed germ from bar to marker */
-.germ-marker {
-    fill: #f39c12;
-    stroke: #e67e22;
-    stroke-width: 1;
-     cursor: pointer;
-}
-
-.bar-label {
-    font-size: 9px;
-    fill: #fff;
-    text-anchor: middle;
-    pointer-events: none;
-}
-.bar-label-dark {
-    font-size: 9px;
-    fill: #333;
-    text-anchor: middle;
-    pointer-events: none;
-}
-
-
-/* Timeline Lab Value Plots */
-.crp-plot path {
-    stroke: #3498db;
-    fill: none;
-    stroke-width: 1.5;
-}
- .crp-point {
-   fill: #3498db;
-   stroke-width: 1;
-   cursor: pointer;
-}
-
-.lc-plot path {
-    stroke: #9b59b6;
-    fill: none;
-    stroke-width: 1.5;
-}
-.lc-point {
-   fill: #9b59b6;
-   stroke-width: 1;
-   cursor: pointer;
-}
-
-.lab-value-label {
-    font-size: 9px;
-    fill: #555;
-    text-anchor: middle;
-     pointer-events: none;
-}
+/* Timeline SVG */
+#timelineSection { margin-top: 30px; position: relative; }
+#timelineSvgWrapper { border: 1px solid #ccc; overflow-x: auto; overflow-y: hidden; background-color: #fdfdfd; margin-bottom: 10px; }
+#timelineSvg { display: block; min-width: 800px; }
+.axis-line { stroke: #555; stroke-width: 2; }
+.axis-tick line { stroke: #ccc; stroke-width: 1; }
+.axis-tick text { fill: #555; font-size: 10px; text-anchor: middle; }
+.axis-label { fill: #333; font-size: 11px; text-anchor: end; }
+.op-marker { fill: #e74c3c; stroke: #c0392b; stroke-width: 1; cursor: pointer; }
+.event-marker { fill: #f1c40f; stroke: #f39c12; stroke-width: 1; cursor: pointer; }
+.note-marker { fill: #bdc3c7; stroke: #95a5a6; stroke-width: 1; cursor: pointer; }
+.marker-label { font-size: 10px; fill: #333; text-anchor: middle; pointer-events: none; }
+.antibiotic-bar { fill: #2ecc71; opacity: 0.7; stroke: #27ae60; stroke-width: 0.5; cursor: pointer; }
+.germ-marker { fill: #f39c12; stroke: #e67e22; stroke-width: 1; cursor: pointer; }
+.bar-label { font-size: 9px; fill: #fff; text-anchor: middle; pointer-events: none; }
+.bar-label-dark { font-size: 9px; fill: #333; text-anchor: middle; pointer-events: none; }
+.crp-plot path { stroke: #3498db; fill: none; stroke-width: 1.5; }
+.crp-point { fill: #3498db; stroke-width: 1; cursor: pointer; }
+.lc-plot path { stroke: #9b59b6; fill: none; stroke-width: 1.5; }
+.lc-point { fill: #9b59b6; stroke-width: 1; cursor: pointer; }
+.lab-value-label { font-size: 9px; fill: #555; text-anchor: middle; pointer-events: none; }
 
 /* Tooltip */
-.tooltip {
-    position: absolute;
-    text-align: left;
-    padding: 8px;
-    font-size: 12px;
-    background: rgba(51, 51, 51, 0.9);
-    color: #fff;
-    border: 0px;
-    border-radius: 4px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-    white-space: pre-wrap;
-    max-width: 280px;
-    z-index: 10;
-}
+.tooltip { position: absolute; text-align: left; padding: 8px; font-size: 12px; background: rgba(51, 51, 51, 0.9); color: #fff; border: 0px; border-radius: 4px; pointer-events: none; opacity: 0; transition: opacity 0.2s ease-in-out; white-space: pre-wrap; max-width: 280px; z-index: 10; }
 
-/* Summary List Styles */
+/* Summary Section Layout */
 #summariesSection {
-    margin-top: 30px;
+    margin-top: 20px; /* Adjusted margin */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px; /* Increased gap */
+    gap: 25px;
+    /* Default: 1 column */
+    grid-template-columns: 1fr;
 }
 
-.summary-box { /* Style each summary box */
-     border: 1px solid #eee;
-     padding: 15px;
-     border-radius: 4px;
-     background-color: #fdfdfd; /* Light background */
-     display: flex; /* Use flexbox for layout */
-     flex-direction: column; /* Stack title, list, button vertically */
+/* Apply 3 columns only on wider screens */
+@media (min-width: 992px) { /* Adjust breakpoint as needed */
+    #summariesSection {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-.summary-box h4 {
-     margin-bottom: 10px; /* Space below title */
-}
-
-.summary-list-container {
-     max-height: 250px;
-     overflow-y: auto;
-     margin-bottom: 10px;
-     flex-grow: 1; /* Allow list to grow */
-     border: 1px solid #eee; /* Add border around list */
-     padding: 5px; /* Padding inside border */
-     border-radius: 3px;
-}
-
-
-#summariesSection ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 0;
-}
-
-#summariesSection li {
-    background-color: #ecf0f1;
-    margin-bottom: 8px;
-    padding: 8px 12px;
-    border-radius: 3px;
-    font-size: 0.95em;
-    border-left: 4px solid #bdc3c7;
-    line-height: 1.4;
-}
-
+/* Summary Box Styling */
+.summary-box { border: 1px solid #eee; padding: 15px; border-radius: 4px; background-color: #fdfdfd; display: flex; flex-direction: column; }
+.summary-list-container { max-height: 250px; overflow-y: auto; margin-bottom: 10px; flex-grow: 1; border: 1px solid #eee; padding: 5px; border-radius: 3px; }
+#summariesSection ul { list-style-type: none; padding-left: 0; margin-top: 0; }
+#summariesSection li { background-color: #ecf0f1; margin-bottom: 8px; padding: 8px 12px; border-radius: 3px; font-size: 0.95em; border-left: 4px solid #bdc3c7; line-height: 1.4; }
 #opSummary li { border-left-color: #e74c3c; }
 #germSummary li { border-left-color: #f39c12; }
 #antibioticSummary li { border-left-color: #2ecc71; }
+#summariesSection li .date { font-weight: bold; margin-right: 8px; color: #555; display: inline-block; min-width: 80px; }
+.summary-box button { margin-top: auto; align-self: flex-start; }
 
-#summariesSection li .date {
-    font-weight: bold;
-    margin-right: 8px;
-    color: #555;
-    display: inline-block;
-    min-width: 80px;
-}
-
-.summary-box button {
-     margin-top: auto; /* Push button to bottom */
-     align-self: flex-start; /* Align button left */
+/* Divider */
+hr.section-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 30px 0;
 }
 
 
 /* Clipboard HTML Table Styles */
-.clipboard-table {
-    border-collapse: collapse;
-    width: 100%;
-    font-family: sans-serif;
-    font-size: 10pt;
-    margin-bottom: 1em; /* Add space between tables if multiple copied */
-}
-.clipboard-table caption {
-    font-weight: bold;
-    font-size: 11pt;
-    text-align: left;
-    padding-bottom: 5px;
-    caption-side: top; /* Ensure caption is above */
-}
+.clipboard-table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 10pt; margin-bottom: 1em; }
+.clipboard-table caption { font-weight: bold; font-size: 11pt; text-align: left; padding-bottom: 5px; caption-side: top; }
+.clipboard-table th, .clipboard-table td { border: 1px solid #ddd; padding: 6px; text-align: left; vertical-align: top; }
+.clipboard-table th { background-color: #f2f2f2; font-weight: bold; }
+.clipboard-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
 
-.clipboard-table th, .clipboard-table td {
-    border: 1px solid #ddd;
-    padding: 6px;
-    text-align: left;
-    vertical-align: top; /* Align cell content top */
-}
-.clipboard-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-.clipboard-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+/* Print Styles */
+@media print {
+    body { padding: 0; background-color: #fff; color: #000; font-size: 10pt; } /* Base print font size */
+    .container { box-shadow: none; border: none; padding: 5mm; max-width: 100%; } /* Use mm for print padding */
+    section.card { box-shadow: none; border: none; page-break-inside: avoid; padding: 0; margin-bottom: 10mm; }
+
+    /* Default: Hide everything except output section */
+    body > *:not(#outputSection) { display: none !important; }
+    #outputSection { display: block !important; }
+    #summariesSection { display: none !important; } /* Hide summaries by default */
+    #timelineSection h3, #timelineSection p { display: none !important; } /* Hide timeline title/hint */
+    #printTimelineButton { display: none !important; } /* Hide print button */
+     hr.section-divider { display: none !important;}
+
+    /* Specific styles when printing timeline only */
+    body.printing-timeline-only #summariesSection {
+        display: none !important; /* Ensure summaries are hidden */
+    }
+    body.printing-timeline-only #timelineSection {
+         display: block !important; /* Ensure timeline is visible */
+         width: 100%;
+         border: none;
+         padding: 0;
+         margin: 0;
+         page-break-inside: auto; /* Allow breaking if needed */
+    }
+     body.printing-timeline-only #timelineSvgWrapper {
+        border: none;
+        overflow: visible; /* Don't clip or scroll in print */
+     }
+      body.printing-timeline-only #timelineSvg {
+         min-width: unset; /* Remove min-width for print scaling */
+         width: 100%; /* Scale SVG width to container */
+         height: auto; /* Maintain aspect ratio */
+      }
+
+     /* General Print SVG styles */
+     #timelineSvg { border: 1px solid #aaa; }
+     .axis-line, .axis-tick line { stroke: #000; }
+     .axis-tick text, .axis-label, .marker-label, .lab-value-label, .bar-label-dark { fill: #000 !important; font-size: 8pt; } /* Smaller font for print */
+     .bar-label { fill: #000 !important; font-size: 7pt; } /* Even smaller on bars */
+
+     .op-marker { fill: #e74c3c !important; stroke: #000 !important; }
+     .event-marker { fill: #f1c40f !important; stroke: #000 !important; }
+     .note-marker { fill: #bdc3c7 !important; stroke: #000 !important; }
+     .antibiotic-bar { fill: #2ecc71 !important; stroke: #000 !important; opacity: 0.6; } /* Slightly less opacity */
+     .germ-marker { fill: #f39c12 !important; stroke: #000 !important; }
+     .crp-plot path, .crp-point { stroke: #3498db !important; fill: #3498db !important; stroke-width: 1 !important; }
+     .lc-plot path, .lc-point { stroke: #9b59b6 !important; fill: #9b59b6 !important; stroke-width: 1 !important; }
+     .crp-point, .lc-point { r: 2; } /* Smaller points */
+
+     .tooltip { display: none !important; } /* Hide tooltips */
 }
